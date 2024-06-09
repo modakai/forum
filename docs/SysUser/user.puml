@@ -1,0 +1,70 @@
+@startuml
+title 系统用户ER图
+entity SysUser {
+    Long id
+    String username：用户账号
+    String password：用户密码
+    String nickname：用户昵称
+    String avatar：头像
+    String phone：手机号
+    String gender：性别
+    String enabled：状态
+    String type：类型
+    String remark：备注
+    String create_time：创建时间
+    String update_time：更新时间
+    String create_user：创建人
+    String update_user：更新人
+}
+
+' 角色
+entity SysRole {
+    Long id
+    String name：角色名称
+    String code：标识符
+    Integer sort：排序
+    String status：状态
+    String remark：备注
+    String create_time：创建时间
+    String update_time：更新时间
+    String create_user：创建人
+    String update_user：更新人
+}
+' 菜单
+entity SysMenu {
+    Long id
+    String name：菜单名称
+    String code：标识符
+    String path：访问路径
+    String component：组件路径
+    String icon：图标
+    Integer type：类型
+    Integer sort：排序
+    String show_status：显示状态
+    String status：状态
+    String remark：备注
+    String create_time：创建时间
+    String update_time：更新时间
+    String create_user：创建人
+    String update_user：更新人
+}
+' 对应的中间表
+entity SysUserRole {
+    Long id
+    Long user_id：用户id
+    Long role_id：角色id
+}
+entity SysRoleMenu {
+    Long id
+    Long role_id：角色id
+    Long menu_id：菜单id
+}
+
+' 对应关系
+SysUser ||--|{ SysUserRole
+SysUserRole ||-|{ SysRole
+SysRole ||--|{ SysRoleMenu
+SysRoleMenu ||-|{ SysMenu
+
+}
+@enduml

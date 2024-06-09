@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title 系统用户登录流程
+autonumber
+skinparam responseMessageBelowArrow true
+
+actor 用户
+participant 浏览器
+participant 服务器
+database 数据库
+
+用户 -> 用户: 填写表单
+用户 -> 浏览器: 提交表单
+浏览器 -> 服务器: 发送请求
+服务器 -> 服务器: 处理验证逻辑
+alt 验证成功
+    服务器 -> 数据库: 查询用户信息
+    数据库 --> 服务器: 返回用户信息
+    服务器 --> 浏览器: 返回登录成功
+    浏览器 --> 用户: 显示登入成功\n并跳转页面
+else 验证失败
+    服务器 ---> 浏览器: 返回登录失败
+    浏览器 --> 用户: 显示登入失败
+end
+
+@enduml
