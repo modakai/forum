@@ -13,6 +13,8 @@ target/
 *.iml
 *.ipr
 
+### JR ###
+/**/*/rebel.xml
 
 ### Eclipse ###
 .apt_generated

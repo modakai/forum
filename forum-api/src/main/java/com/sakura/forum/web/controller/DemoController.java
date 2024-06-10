@@ -14,7 +14,6 @@ public class DemoController {
 
     @GetMapping("/demo")
     public SysUser demo() {
-
         return sysUserService.demo("admin");
     }
 }
