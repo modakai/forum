@@ -1,5 +1,6 @@
 package com.sakura.forum.web.core.config;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -13,6 +14,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI openApi() {
         return new OpenAPI()
+                // 配置信息
                 .info(apiInfo());
     }
 
@@ -24,8 +26,10 @@ public class OpenApiConfig {
     public GroupedOpenApi systemApi() {
         return GroupedOpenApi.builder().group("System系统模块")
                 .pathsToMatch("/system/**")
+                .addOpenApiMethodFilter(method -> method.isAnnotationPresent(Operation.class))
                 .build();
     }
+
 
     public Info apiInfo() {
         return new Info()
