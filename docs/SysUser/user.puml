@@ -1,7 +1,8 @@
 @startuml
-title 系统用户ER图
+title RBAC设计图
 entity SysUser {
     Long id
+    Long dept_id：部门ID
     String username：用户账号
     String password：用户密码
     String nickname：用户昵称
@@ -42,12 +43,22 @@ entity SysMenu {
     Integer sort：排序
     String show_status：显示状态
     String status：状态
-    String remark：备注
-    String create_time：创建时间
-    String update_time：更新时间
-    String create_user：创建人
-    String update_user：更新人
 }
+
+entity SysDept {
+    Long id
+    Long parent_id
+    String ancestors: 祖籍id列表
+    String dept_name:部门名称
+    String leader:部门负责人
+    String phone:联系电话
+    String email:邮箱
+    Integer sort:排序
+    String status:状态
+    String remark:备注
+}
+
+
 ' 对应的中间表
 entity SysUserRole {
     Long id
@@ -59,12 +70,20 @@ entity SysRoleMenu {
     Long role_id：角色id
     Long menu_id：菜单id
 }
+entity SysRoleDept {
+    Long dept_id
+    Long role_id
+}
+
 
 ' 对应关系
 SysUser ||--|{ SysUserRole
 SysUserRole ||-|{ SysRole
 SysRole ||--|{ SysRoleMenu
 SysRoleMenu ||-|{ SysMenu
+SysUser ||-|| SysDept
+SysDept ||-|{ SysRoleDept
+SysRole ||-|{ SysRoleDept
 
 }
 @enduml
