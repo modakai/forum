@@ -23,3 +23,12 @@ mybatis-plus:
   type-aliases-package: com.sakura.**.pojo
   # mapper 映射文件
   mapper-locations: classpath*:mapper/**/*Mapper.xml
+# 接口文档配置
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs

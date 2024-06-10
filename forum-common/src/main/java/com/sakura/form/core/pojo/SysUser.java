@@ -2,6 +2,7 @@ package com.sakura.form.core.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.sakura.form.core.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import lombok.ToString;
  *
  * @author modakai
  */
+@Schema(description = "系统用户")
 @TableName("sys_user")
 @Getter
 @Setter
