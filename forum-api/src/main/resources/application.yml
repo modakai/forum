@@ -1,5 +1,25 @@
+# 服务配置
 server:
   port: 9527
+
+# spring 配置
 spring:
+  profiles:
+    active: dev
   application:
     name: forum
+
+# MP 配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    use-generated-keys: true
+    cache-enabled: true
+  global-config:
+    db-config:
+      id-type: auto
+    banner: false
+  # 搜索指定包别名
+  type-aliases-package: com.sakura.**.pojo
+  # mapper 映射文件
+  mapper-locations: classpath*:mapper/**/*Mapper.xml

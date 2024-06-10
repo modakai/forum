@@ -28,6 +28,7 @@
             <groupId>com.sakura.forum</groupId>
             <artifactId>forum-framework</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>

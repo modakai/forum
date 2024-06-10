@@ -9,23 +9,18 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <description>
-        整体框架
-    </description>
-
-    <artifactId>forum-framework</artifactId>
-
+    <artifactId>forum-system</artifactId>
 
     <dependencies>
-        <!-- SpringBoot Web依赖 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.sakura.forum</groupId>
+            <artifactId>forum-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.sakura.forum</groupId>
-            <artifactId>forum-system</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

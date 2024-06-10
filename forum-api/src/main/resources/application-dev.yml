@@ -1,0 +1,16 @@
+spring:
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/forum?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123abc
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 300000
+      max-lifetime: 1200000
+      auto-commit: true
+      connection-init-sql: SELECT 1
