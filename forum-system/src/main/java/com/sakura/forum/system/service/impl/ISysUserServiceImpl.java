@@ -1,7 +1,7 @@
 package com.sakura.forum.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sakura.form.core.pojo.SysUser;
+import com.sakura.forum.core.pojo.SysUser;
 import com.sakura.forum.system.mapper.SysUserMapper;
 import com.sakura.forum.system.service.ISysUserService;
 import lombok.AllArgsConstructor;

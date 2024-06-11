@@ -1,7 +1,7 @@
 package com.sakura.forum.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.sakura.form.core.pojo.SysUser;
+import com.sakura.forum.core.pojo.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

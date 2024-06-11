@@ -1,7 +1,7 @@
-package com.sakura.form.core.pojo;
+package com.sakura.forum.core.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.sakura.form.core.BaseEntity;
+import com.sakura.forum.core.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

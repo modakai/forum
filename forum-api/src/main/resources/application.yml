@@ -10,6 +10,7 @@ fourm:
   version: 1.0.0
   # 验证码类型 math 数字计算 char 字符验证
   captchaType: math
+  
 # 服务配置
 server:
   port: 9527
@@ -35,7 +36,6 @@ mybatis-plus:
   type-aliases-package: com.sakura.**.pojo
   # mapper 映射文件
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-# 接口文档配置
 # springdoc-openapi项目配置
 springdoc:
   swagger-ui:

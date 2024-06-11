@@ -1,4 +1,4 @@
-package com.sakura.form.core;
+package com.sakura.forum.core;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
