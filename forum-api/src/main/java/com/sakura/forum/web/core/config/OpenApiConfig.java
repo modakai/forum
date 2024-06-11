@@ -1,15 +1,20 @@
 package com.sakura.forum.web.core.config;
 
+import com.sakura.form.config.ForumConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import jakarta.annotation.Resource;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
+
+    @Resource
+    private ForumConfig forumConfig;
 
     @Bean
     public OpenAPI openApi() {
@@ -33,9 +38,9 @@ public class OpenApiConfig {
 
     public Info apiInfo() {
         return new Info()
-                .title("校园论坛系统")
-                .description("论坛系统接口文档")
-                .version("1.0.0")
+                .title(forumConfig.getTitle())
+                .description(forumConfig.getDescription())
+                .version(forumConfig.getVersion())
                 .contact(
                         new Contact().name("modakai").email("2049202552@qq.com")
                 );
