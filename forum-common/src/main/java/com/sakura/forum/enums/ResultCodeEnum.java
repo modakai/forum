@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum ResultCodeEnum {
     SUCCESS(200, "操作成功"),
     FAIL(500, "操作失败"),
-    ;
+    WARN(501, "警告");
 
     /**
      * 自定义状态码
