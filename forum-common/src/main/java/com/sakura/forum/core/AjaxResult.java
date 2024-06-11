@@ -23,8 +23,6 @@ public class AjaxResult<T> implements Serializable {
     private final int code;
     @Schema(name = "响应信息", description = "响应信息")
     private final String msg;
-    @Schema(name = "详细信息", description = "用于给开发人员观看")
-    private String detailMsg;
     @Schema(name = "响应数据", description = "响应数据")
     private final T data;
 
@@ -37,15 +35,6 @@ public class AjaxResult<T> implements Serializable {
         this.data = data;
     }
 
-    /**
-     * 私有化构造器
-     */
-    private AjaxResult(int code, String msg, String detailMsg, T data) {
-        this.code = code;
-        this.msg = msg;
-        this.detailMsg = detailMsg;
-        this.data = data;
-    }
 
     /**
      * 响应成功
@@ -59,6 +48,13 @@ public class AjaxResult<T> implements Serializable {
      */
     public static <T> AjaxResult<T> success(T data) {
         return success(ResultCodeEnum.SUCCESS, data);
+    }
+
+    /**
+     * 响应成功
+     */
+    public static <T> AjaxResult<T> success(String msg) {
+        return success(ResultCodeEnum.SUCCESS.getCode(), msg, null);
     }
 
     /**
@@ -86,35 +82,42 @@ public class AjaxResult<T> implements Serializable {
      * 响应失败
      */
     public static <T> AjaxResult<T> fail() {
-        return fail(ResultCodeEnum.FAIL, null, null);
+        return fail(ResultCodeEnum.FAIL.getCode(), null, null);
     }
 
     /**
      * 响应失败
      */
-    public static <T> AjaxResult<T> fail(String detailMsg) {
-        return fail(ResultCodeEnum.FAIL, detailMsg, null);
+    public static <T> AjaxResult<T> fail(String msg) {
+        return fail(ResultCodeEnum.FAIL.getCode(), msg, null);
     }
 
     /**
      * 响应失败
      */
-    public static <T> AjaxResult<T> fail(String detailMsg, T data) {
-        return fail(ResultCodeEnum.FAIL, detailMsg, data);
+    public static <T> AjaxResult<T> fail(T data) {
+        return fail(ResultCodeEnum.FAIL, data);
     }
 
     /**
      * 响应失败
      */
-    public static <T> AjaxResult<T> fail(ResultCodeEnum resultCodeEnum, String detailMsg, T data) {
-        return fail(resultCodeEnum.getCode(), resultCodeEnum.getMessage(), detailMsg, data);
+    public static <T> AjaxResult<T> fail(ResultCodeEnum resultCodeEnum) {
+        return fail(resultCodeEnum.getCode(), resultCodeEnum.getMessage(), null);
     }
 
     /**
      * 响应失败
      */
-    public static <T> AjaxResult<T> fail(int code, String msg, String detailMsg, T data) {
-        return new AjaxResult<>(code, msg, detailMsg, data);
+    public static <T> AjaxResult<T> fail(ResultCodeEnum resultCodeEnum, T data) {
+        return fail(resultCodeEnum.getCode(), resultCodeEnum.getMessage(), data);
+    }
+
+    /**
+     * 响应失败
+     */
+    public static <T> AjaxResult<T> fail(int code, String msg, T data) {
+        return new AjaxResult<>(code, msg, data);
     }
 
 }

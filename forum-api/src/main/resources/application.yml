@@ -10,7 +10,7 @@ fourm:
   version: 1.0.0
   # 验证码类型 math 数字计算 char 字符验证
   captchaType: math
-  
+
 # 服务配置
 server:
   port: 9527
@@ -21,6 +21,13 @@ spring:
     active: dev
   application:
     name: forum
+  # 日期格式化配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
 
 # MP 配置
 mybatis-plus:
