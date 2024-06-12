@@ -1,0 +1,11 @@
+### 系统用户登入请求
+POST /sys/login
+Content-Type: application/json
+{
+    "username": "admin",
+    "password": "123456"，
+    “loginType": "normal",
+    "code": "1234"
+}
+
+###

@@ -1,4 +1,4 @@
-package com.sakura.forum.core.pojo;
+package com.sakura.forum.core.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.sakura.forum.core.BaseEntity;
