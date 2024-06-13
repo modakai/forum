@@ -84,13 +84,6 @@
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!--  Redis  -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-redis</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>io.springboot.plugin</groupId>
                 <artifactId>captcha-spring-boot-starter</artifactId>
