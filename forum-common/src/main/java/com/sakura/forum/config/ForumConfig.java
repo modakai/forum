@@ -13,5 +13,4 @@ public class ForumConfig {
     private String title;
     private String description;
     private String version;
-    private String captchaType;
 }

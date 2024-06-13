@@ -30,7 +30,7 @@ public class OpenApiConfig {
     @Bean
     public GroupedOpenApi systemApi() {
         return GroupedOpenApi.builder().group("System系统模块")
-                .pathsToMatch("/system/**")
+                .pathsToMatch("/system/**", "/captcha/**")
                 .addOpenApiMethodFilter(method -> method.isAnnotationPresent(Operation.class))
                 .build();
     }

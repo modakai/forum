@@ -25,6 +25,7 @@
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <sa-token.version>1.38.0</sa-token.version>
         <knife4j-openapi3.version>4.4.0</knife4j-openapi3.version>
+        <captcha-easy.version>2.2.3</captcha-easy.version>
         <mysql.version>8.0.16</mysql.version>
         <lombok.version>1.18.30</lombok.version>
         <springdoc-opneapi.version>2.3.0</springdoc-opneapi.version>
@@ -88,6 +89,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-redis</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springboot.plugin</groupId>
+                <artifactId>captcha-spring-boot-starter</artifactId>
+                <version>${captcha-easy.version}</version>
             </dependency>
             <!-- 接口文档 -->
             <dependency>

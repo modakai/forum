@@ -2,9 +2,11 @@ package com.sakura.forum.framework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * Redis 配置类
@@ -19,11 +21,23 @@ public class RedisConfig {
      *
      * @param factory 自动配置好
      */
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    @Bean(name = "customRedisTemplate")
+    @Order(0)
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
-        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
+
+        //使用StringRedisSerializer来序列化和反序列化redis的key值
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+
+        //Hash的key也采用StringRedisSerializer的序列化方式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
+
+        template.afterPropertiesSet();
         return template;
     }
 }

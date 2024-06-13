@@ -8,8 +8,21 @@ fourm:
   description: 论坛系统接口文档
   # 项目版本
   version: 1.0.0
-  # 验证码类型 math 数字计算 char 字符验证
-  captchaType: math
+
+# 验证码配置
+customer-captcha:
+  # 支持的类型 spec，math，chinese
+  type: spec
+  # 验证码的宽
+  width: 100
+  # 验证码的高度
+  height: 40
+  # 验证码的长度
+  len: 4
+  # 验证码的字体类型 0 到 9
+  font: 9
+  # 保存时间 秒位单位
+  time: 60
 
 # 服务配置
 server:
