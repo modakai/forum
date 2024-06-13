@@ -1,0 +1,42 @@
+@startuml
+title 验证码服务（简单工厂+策略模式）
+
+' 策略模式中的-抽象策略
+' 工厂模式中的-抽象工厂
+interface CaptchaService {
+
+--
+    void generateCaptcha( params, request, response)
+}
+
+' 工厂类
+class CaptchaFactory {
+    ApplicationContext context;
+
+    CaptchaProperties captchaProperties;
+}
+CaptchaFactory ..> CaptchaService:依赖
+
+' 具体策略
+class SpecCaptchaServiceImpl {
+    CaptchaProperties captchaProperties;
+--
+    void generateCaptcha( params, request, response)
+}
+
+'  SpecCaptchaServiceImpl 实现了 CaptchaService
+CaptchaService <|.. SpecCaptchaServiceImpl : 实现
+
+' normal 类型的验证码配置
+class CaptchaProperties {
+    private String type;
+    private Integer width;
+    private Integer height;
+    private Integer len;
+    private Integer font;
+    private Integer time;
+}
+
+SpecCaptchaServiceImpl o-- CaptchaProperties:聚合
+CaptchaFactory o-- CaptchaProperties:聚合
+@enduml
