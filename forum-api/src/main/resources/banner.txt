@@ -1,4 +1,4 @@
-Application Version: ${form.version}
+Application Version: ${forum.version}
 Spring Boot Version: ${spring-boot.version}
 ${AnsiColor.BRIGHT_GREEN}
           _                 _______

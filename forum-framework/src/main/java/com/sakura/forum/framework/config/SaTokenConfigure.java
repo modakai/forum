@@ -3,6 +3,7 @@ package com.sakura.forum.framework.config;
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
+import com.sakura.forum.security.StpKit;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,7 +15,8 @@ import java.util.List;
 public class SaTokenConfigure implements WebMvcConfigurer {
 
     private final List<String> excludePathPatterns = List.of(
-            "/system/login", "/system/captcha", "/doc.html", "/webjars/**"
+            "/system/login", "/system/captcha", "/doc.html", "/webjars/**",
+            "/favicon.ico"
     );
 
     /**
@@ -24,7 +26,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
     public void setSaTokenConfig() {
         // 设定 StpUtil 使用的 SaTokenConfig 配置参数对象
         SaTokenConfig config1 = new SaTokenConfig();
-        config1.setTokenName("ADMIN-TOKEN");
+        config1.setTokenName("ADMIN");
         config1.setTokenPrefix("Bearer");
         config1.setActiveTimeout(-1);
         config1.setIsConcurrent(true);
@@ -33,6 +35,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         config1.setTokenStyle("tik");
         config1.setIsLog(true);
         // 更多设置 ...
+        StpKit.ADMIN.setConfig(config1);
         StpUtil.stpLogic.setConfig(config1);
     }
 

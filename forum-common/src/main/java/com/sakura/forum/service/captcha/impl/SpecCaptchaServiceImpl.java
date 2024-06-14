@@ -10,8 +10,7 @@ import io.springboot.captcha.SpecCaptcha;
 import io.springboot.captcha.utils.CaptchaJakartaUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,12 +20,20 @@ import java.util.concurrent.TimeUnit;
  * 具体策略类
  */
 @Service("spec")
-@AllArgsConstructor(onConstructor_ = @__({@Autowired}))
 public class SpecCaptchaServiceImpl implements CaptchaService {
 
     private final CaptchaProperties captchaProperties;
 
     private final RedisUtil redisUtil;
+
+    private final String KEY_PREFIX;
+
+    public SpecCaptchaServiceImpl(CaptchaProperties captchaProperties, RedisUtil redisUtil) {
+        this.captchaProperties = captchaProperties;
+        this.redisUtil = redisUtil;
+        // key的前缀
+        KEY_PREFIX = RedisCacheConstant.CAPTCHA_KEY + captchaProperties.getType() + ":";
+    }
 
 
     @Override
@@ -36,8 +43,9 @@ public class SpecCaptchaServiceImpl implements CaptchaService {
         specCaptcha.setCharType(captchaProperties.getFont());
 
         //  保存到redis
+
         redisUtil.setCacheObject(
-                RedisCacheConstant.CAPTCHA_KEY + params.getKey(),
+                KEY_PREFIX + params.getKey(),
                 specCaptcha.text(),
                 captchaProperties.getTime(),
                 TimeUnit.SECONDS
@@ -48,6 +56,25 @@ public class SpecCaptchaServiceImpl implements CaptchaService {
             CaptchaJakartaUtil.out(specCaptcha, request, response);
         } catch (IOException e) {
             throw new ServiceException("验证码生成失败");
+        }
+    }
+
+    @Override
+    public void removeCaptcha(String username) {
+        redisUtil.deleteObject(KEY_PREFIX + username);
+    }
+
+    @Override
+    public void validateCaptcha(String username, String captcha) {
+        // 1 从redis中获取数据
+        String redisCaptcha = redisUtil.getCacheObject(KEY_PREFIX + username);
+        if (StringUtils.isBlank(redisCaptcha)) {
+            throw new ServiceException("验证码已过期，请重新获取");
+        }
+
+        // 2 验证码校验
+        if (!StringUtils.equalsIgnoreCase(redisCaptcha, captcha)) {
+            throw new ServiceException("验证码错误");
         }
     }
 }
