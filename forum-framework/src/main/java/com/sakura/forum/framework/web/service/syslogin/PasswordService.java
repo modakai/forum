@@ -1,7 +1,8 @@
 package com.sakura.forum.framework.web.service.syslogin;
 
-import cn.dev33.satoken.secure.BCrypt;
 import com.sakura.forum.exception.user.UserPasswordNotMatchException;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,32 +14,36 @@ import org.springframework.stereotype.Service;
 public class PasswordService {
 
 
-    private static final int SALT_LENGTH = 16;
-    // 加盐的次数
-    private static final String salt = BCrypt.gensalt(SALT_LENGTH);
+    private static final int ITERATIONS = 10; // 迭代次数
+    private static final int MEMORY = 65536; // 内存占用(KB)
+    private static final int PARALLELISM = 2; // 并行度
+
+    // 默认盐 就是16
+    private static final Argon2 argon2 = Argon2Factory.create();
 
     /**
      * 使用 BCrypt 进行加密
      *
-     * @param password 加密的密码
+     * @param plainTextPassword 加密的密码
      * @return 加密后的密文
      */
-    public String encryption(String password) {
-        return BCrypt.hashpw(password, salt);
+    public String encryption(String plainTextPassword) {
+        return argon2.hash(ITERATIONS, MEMORY, PARALLELISM, plainTextPassword.toCharArray());
     }
 
 
     /**
      * 验证
      *
-     * @param candidate_password 明文
-     * @param stored_hash        密文
+     * @param plainTextPassword 明文
+     * @param storedHash        密文
      */
-    public void validate(String candidate_password, String stored_hash) {
-        if (!BCrypt.checkpw(candidate_password, stored_hash)) {
+    public void validate(String plainTextPassword, String storedHash) {
+        if (!argon2.verify(storedHash, plainTextPassword.toCharArray())) {
             // 不匹配就抛出密码错误异常
             throw new UserPasswordNotMatchException();
         }
+
     }
 
 }

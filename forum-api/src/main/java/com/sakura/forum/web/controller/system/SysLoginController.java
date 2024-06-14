@@ -3,6 +3,7 @@ package com.sakura.forum.web.controller.system;
 
 import com.sakura.forum.core.AjaxResult;
 import com.sakura.forum.core.domain.dto.SysUserLoginDto;
+import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +29,7 @@ public class SysLoginController {
     @PostMapping("login")
     public AjaxResult<Object> login(@RequestBody SysUserLoginDto formData) {
         String token = sysLoginService.login(formData);
-        return AjaxResult.success(token);
+        return AjaxResult.success(ResultCodeEnum.SUCCESS, token);
     }
 
 

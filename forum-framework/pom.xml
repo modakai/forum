@@ -27,6 +27,12 @@
             <groupId>com.sakura.forum</groupId>
             <artifactId>forum-system</artifactId>
         </dependency>
+
+        <!-- 密码加密 -->
+        <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
