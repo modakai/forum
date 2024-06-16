@@ -1,0 +1,64 @@
+:root.dark {
+    color-scheme: dark;
+
+    /* 主色调整 */
+    --el-color-primary: #598B8E; /* 保持主色不变，根据需要可调整为更深色以适应深色背景 */
+    --el-color-primary-light-3: #4D7679; /* 主色稍亮，但依然适配深色背景 */
+    --el-color-primary-light-5: #7FAFC6; /* 更亮，对比度适中 */
+    --el-color-primary-light-7: #A8D5E3; /* 较亮，确保在深背景下清晰可见 */
+    --el-color-primary-light-8: #D1E9F2; /* 接近中性背景色，保持与文本的良好对比 */
+    --el-color-primary-dark-2: #2E5659; /* 主色加深，用于强调或深色部分 */
+
+    /* 成功、警告、危险、普通和错误颜色也应相应调整为深色背景下的高对比度 */
+    --el-color-success: #38A169; /* 更深的绿色，确保在深背景下突出 */
+    --el-color-warning: #F59E0B; /* 维持或微调黄色，保证足够对比度 */
+    --el-color-danger: #DC2626; /* 更深的红色，确保警示作用 */
+    --el-color-error: #E88181; /* 与 --el-color-danger 保持一致或略作调整 */
+    --el-color-info: #2D59C9; /* 深蓝色，适合深色背景 */
+
+    /* 文本颜色调整 */
+    --el-text-color-primary: #ECEEF0; /* 主文本颜色，亮以确保可读性 */
+    --el-text-color-regular: #AEBACF; /* 次文本，稍暗 */
+    --el-text-color-secondary: #858DAA; /* 辅助文本，更暗 */
+    --el-text-color-placeholder: #737D95; /* 输入框占位符，柔和 */
+    --el-text-color-disabled: #666E87; /* 禁用状态文本，低对比度 */
+
+    /* 背景颜色 */
+    --el-bg-color: #1F2937; /* 深色背景 */
+    --el-bg-color-page: #273444; /* 页面背景，稍浅于主背景 */
+    --el-bg-color-overlay: rgba(255, 255, 255, 0.05); /* 轻微叠加层，透明度调整以适应深色背景 */
+
+    /* 边框颜色 */
+    --el-border-color: #374151; /* 边框颜色，深色系 */
+    --el-border-color-light: #4B5563; /* 边框稍亮 */
+    --el-border-color-lighter: #6B7280; /* 边框更亮，用于区分层次 */
+    --el-border-color-extra-light: #D1D5DB; /* 特别亮，用于特殊提示或分隔 */
+    --el-border-color-dark: #111827; /* 极深色边框，用于强调 */
+
+    /* 其他颜色和阴影也需要调整以适应深色主题，确保整体的一致性和可读性 */
+
+
+    /* wangeditor主题 */
+    --w-e-textarea-bg-color: var(--el-bg-color);
+    --w-e-textarea-color: var(--el-text-color-primary);
+    --w-e-textarea-border-color: var(--el-border-color);
+    --w-e-textarea-slight-border-color: var(--el-border-color-light);
+    --w-e-textarea-slight-color: var(--el-border-color);
+    --w-e-textarea-slight-bg-color: var(--el-bg-color-page);
+    /* --w-e-textarea-selected-border-color: #b4d5ff;
+  --w-e-textarea-handler-bg-color: #4290f7; */
+    --w-e-toolbar-color: var(--el-text-color-primary);
+    --w-e-toolbar-bg-color: var(--el-bg-color);
+    --w-e-toolbar-active-color: var(--el-text-color-primary);
+    --w-e-toolbar-active-bg-color: var(--el-bg-color);
+    --w-e-toolbar-disabled-color: var(--el-text-color-disabled);
+    --w-e-toolbar-border-color: var(--el-border-color);
+    --w-e-modal-button-bg-color: var(--el-bg-color);
+    --w-e-modal-button-border-color: var(--el-border-color);
+
+    .el-button--danger, .el-button--success, .el-button--warning, .el-button--primary, .el-button--info {
+        --el-button-text-color: var(--el-color-black);
+        --el-button-hover-text-color: var(--el-color-black);
+    }
+}
+

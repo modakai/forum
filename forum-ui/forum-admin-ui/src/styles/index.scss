@@ -1,4 +1,10 @@
 @import "reset";
+@import 'element/light.css';
+@import "element/dark.css";
+
+:root {
+  --el-button-text-color: var(--el-color-black);
+}
 
 html,
 body {
