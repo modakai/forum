@@ -1,9 +1,9 @@
-package com.sakura.forum.factory.captcha;
+package com.sakura.forum.framework.factory.captcha;
 
 import com.sakura.forum.enums.CaptchaTypeEnum;
 import com.sakura.forum.exception.ServiceException;
-import com.sakura.forum.service.captcha.CaptchaService;
-import com.sakura.forum.service.captcha.config.CaptchaProperties;
+import com.sakura.forum.framework.web.service.captcha.CaptchaService;
+import com.sakura.forum.framework.web.service.captcha.config.CaptchaProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

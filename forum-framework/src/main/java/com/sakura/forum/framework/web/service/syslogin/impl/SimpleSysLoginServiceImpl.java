@@ -3,11 +3,11 @@ package com.sakura.forum.framework.web.service.syslogin.impl;
 import com.sakura.forum.core.domain.dto.SysUserLoginDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.exception.ServiceException;
-import com.sakura.forum.factory.captcha.CaptchaFactory;
+import com.sakura.forum.framework.factory.captcha.CaptchaFactory;
+import com.sakura.forum.framework.web.service.captcha.CaptchaService;
 import com.sakura.forum.framework.web.service.syslogin.PasswordService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import com.sakura.forum.security.StpKit;
-import com.sakura.forum.service.captcha.CaptchaService;
 import com.sakura.forum.system.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,10 @@
-package com.sakura.forum.service.captcha.impl;
+package com.sakura.forum.framework.web.service.captcha.impl;
 
 import com.sakura.forum.constant.RedisCacheConstant;
 import com.sakura.forum.core.domain.dto.CaptchaDto;
 import com.sakura.forum.exception.ServiceException;
-import com.sakura.forum.service.captcha.CaptchaService;
-import com.sakura.forum.service.captcha.config.CaptchaProperties;
+import com.sakura.forum.framework.web.service.captcha.CaptchaService;
+import com.sakura.forum.framework.web.service.captcha.config.CaptchaProperties;
 import com.sakura.forum.utils.RedisUtil;
 import io.springboot.captcha.SpecCaptcha;
 import io.springboot.captcha.utils.CaptchaJakartaUtil;

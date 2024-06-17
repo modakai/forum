@@ -1,4 +1,4 @@
-package com.sakura.forum.service.captcha;
+package com.sakura.forum.framework.web.service.captcha;
 
 import com.sakura.forum.core.domain.dto.CaptchaDto;
 import jakarta.servlet.http.HttpServletRequest;

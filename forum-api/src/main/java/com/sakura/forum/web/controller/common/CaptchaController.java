@@ -1,8 +1,8 @@
 package com.sakura.forum.web.controller.common;
 
 import com.sakura.forum.core.domain.dto.CaptchaDto;
-import com.sakura.forum.factory.captcha.CaptchaFactory;
-import com.sakura.forum.service.captcha.CaptchaService;
+import com.sakura.forum.framework.factory.captcha.CaptchaFactory;
+import com.sakura.forum.framework.web.service.captcha.CaptchaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
