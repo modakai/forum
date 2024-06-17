@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title 验证码流程
+autonumber
+skinparam responseMessageBelowArrow true
+
+participant 浏览器
+participant 服务器
+database Redis
+
+浏览器 -> 服务器: 发送获取验证码请求\n传递验证码服务type参数
+服务器 -> 服务器: 根据type参数让工厂生成\n验证码策略类生成验证码
+服务器 -> Redis: 缓存验证码
+服务器 --> 浏览器: 返回验证码图片
+@enduml
