@@ -137,7 +137,7 @@ const handleTabClick = (name: TabPaneName): void => {
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="手机号登录" name="sms">
+          <el-tab-pane label="手机号登录" name="sms" disabled>
             <el-form
               ref="ruleSmsForm"
               :rules="smsFormRules"
