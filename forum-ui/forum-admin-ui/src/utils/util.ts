@@ -1,5 +1,6 @@
 // eslint-disable-next-line vue/prefer-import-from-vue
 import { isObject } from '@vue/shared'
+import { nanoid } from 'nanoid'
 
 /**
  * @description 添加单位
@@ -103,4 +104,14 @@ export const timeFormat = (dateTime: number, fmt = 'yyyy-mm-dd') => {
  */
 export const firstToUpperCase = (str = '') => {
   return str.toLowerCase().replace(/( |^)[a-z]/g, ($1) => $1.toUpperCase())
+}
+
+/**
+ * 获取唯一ID
+ * @return { String } id
+ */
+export const genNanoId = (): string => {
+  // 获取当前时间戳
+  const timestamp = Date.now()
+  return nanoid() + timestamp
 }

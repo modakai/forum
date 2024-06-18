@@ -1,15 +1,84 @@
 <script setup lang="ts" name="Login">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { Key, Lock, User } from '@element-plus/icons-vue'
+import type { FormInstance, FormRules, TabPaneName } from 'element-plus'
+import { genNanoId } from '@/utils/util'
 
 const title = import.meta.env.VITE_APP_TITLE
+const loginType = 'password'
 
-const form = reactive({
+// 密码登入表单
+interface normalFormInter {
+  username: string
+  password: string
+  captcha: string
+  rememberMe: boolean
+  loginType: string
+  // 密码登入的验证码key
+  uuid: string
+}
+
+const normalForm = reactive<normalFormInter>({
   username: '',
   password: '',
   captcha: '',
-  rememberMe: true
+  rememberMe: true,
+  loginType: loginType,
+  // 密码登入的验证码key
+  uuid: genNanoId()
 })
+const ruleNormalForm = ref<FormInstance>()
+const normalFormRules = reactive<FormRules<normalFormInter>>({
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+  ],
+  captcha: [
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    { min: 4, max: 4, message: '长度为 4 个字符', trigger: 'blur' }
+  ]
+})
+
+// 短信登入类型
+interface smsFormInter {
+  username: string
+  captcha: string
+  rememberMe: boolean
+  loginType: string
+}
+
+const smsForm = reactive<smsFormInter>({
+  username: '',
+  captcha: '',
+  rememberMe: true,
+  loginType: loginType
+})
+const ruleSmsForm = ref<FormInstance>()
+const smsFormRules = reactive<FormRules<smsFormInter>>({
+  username: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { min: 11, max: 11, message: '长度为 11 个字符', trigger: 'blur' },
+    // 正则表达式校验手机号
+    { pattern: /^1[3456789]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
+  ],
+  captcha: [
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    { min: 6, max: 6, message: '长度为 4 个字符', trigger: 'blur' }
+  ]
+})
+
+// 切换登入类型
+const activeTabName = ref<string>(loginType)
+const handleTabClick = (name: TabPaneName): void => {
+  if (typeof name === 'string') {
+    normalForm.loginType = name
+    smsForm.loginType = name
+  }
+}
 </script>
 
 <template>
@@ -17,48 +86,94 @@ const form = reactive({
     <div class="login-container">
       <!--   背景区   -->
       <div class="login-form-bg hidden">
-        <img src="@/assets/images/login_banner.webp" alt="论坛管理系统" />
-      </div>
-      <div class="login-form-data">
         <h2 class="title">
-          <div class="logo"></div>
+          <!--          <div class="logo"></div>-->
           {{ title }}
         </h2>
-        <el-form :model="form" size="large" label-width="auto" status-icon>
-          <!--用户名-->
-          <el-form-item>
-            <el-input :prefix-icon="User" v-model="form.username" placeholder="用户名" />
-          </el-form-item>
-          <!--     密码     -->
-          <el-form-item>
-            <el-input
-              :prefix-icon="Lock"
-              type="password"
-              v-model="form.password"
-              placeholder="密码"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-input
-              :prefix-icon="Key"
-              v-model="form.captcha"
-              style="flex: 1"
-              placeholder="验证码"
-            />
-            <div class="captcha">验证码</div>
-          </el-form-item>
-          <el-form-item>
-            <!--   记住我   -->
-            <el-checkbox v-model="form.rememberMe">记住我</el-checkbox>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" style="width: 100%">登录</el-button>
-          </el-form-item>
-        </el-form>
+
+        <el-text class="title-info" type="info">xxxxxxxxxxxxxx</el-text>
+        <!--        <img src="@/assets/images/login_banner.webp" alt="论坛管理系统" />-->
+      </div>
+      <!--   表单区域   -->
+      <div class="login-form-data">
+        <el-tabs v-model="activeTabName" @tab-change="handleTabClick">
+          <el-tab-pane label="密码登录" name="password">
+            <el-form
+              ref="ruleNormalForm"
+              :rules="normalFormRules"
+              :model="normalForm"
+              size="large"
+              label-width="auto"
+              status-icon
+            >
+              <!--用户名-->
+              <el-form-item prop="username">
+                <el-input :prefix-icon="User" v-model="normalForm.username" placeholder="用户名" />
+              </el-form-item>
+              <!--     密码     -->
+              <el-form-item prop="password">
+                <el-input
+                  :prefix-icon="Lock"
+                  type="password"
+                  v-model="normalForm.password"
+                  placeholder="密码"
+                />
+              </el-form-item>
+              <el-form-item prop="captcha">
+                <el-input
+                  :prefix-icon="Key"
+                  v-model="normalForm.captcha"
+                  style="flex: 1"
+                  placeholder="验证码"
+                />
+                <div class="captcha">验证码</div>
+              </el-form-item>
+              <el-form-item>
+                <!--   记住我   -->
+                <el-checkbox v-model="normalForm.rememberMe">记住我</el-checkbox>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="width: 100%">登录</el-button>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="手机号登录" name="sms">
+            <el-form
+              ref="ruleSmsForm"
+              :rules="smsFormRules"
+              :model="smsForm"
+              size="large"
+              label-width="auto"
+            >
+              <el-form-item prop="username">
+                <el-input :prefix-icon="User" v-model="smsForm.username" placeholder="手机号" />
+              </el-form-item>
+              <el-form-item prop="captcha">
+                <el-input
+                  :prefix-icon="Key"
+                  v-model="smsForm.captcha"
+                  maxlength="6"
+                  placeholder="验证码"
+                >
+                  <template #suffix>
+                    <el-button type="primary" link>获取验证码</el-button>
+                  </template>
+                </el-input>
+              </el-form-item>
+              <el-form-item>
+                <!--   记住我   -->
+                <el-checkbox v-model="smsForm.rememberMe">记住我</el-checkbox>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="width: 100%">登录</el-button>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
     <div class="login-footer">
-      <span>Copyright © 2018-2021 ruoyi.vip All Rights Reserved.</span>
+      <span>xxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
     </div>
   </div>
 </template>
@@ -78,7 +193,7 @@ const form = reactive({
     padding: 12px;
     margin: auto;
     min-width: 345px;
-    max-width: 700px;
+    max-width: 780px;
     border-radius: 8px;
     background-size: cover;
     background: rgba(255, 255, 255, 0.2);
@@ -89,6 +204,7 @@ const form = reactive({
 
     .login-form-bg {
       width: 380px;
+      text-align: center;
       padding: 35px 20px;
 
       // 大于等于768px时，显示
@@ -101,21 +217,18 @@ const form = reactive({
       img {
         width: 100%;
       }
-    }
-
-    .login-form-data {
-      padding: 32px 20px;
-      width: 320px;
 
       .title {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-weight: 400;
-        font-size: 24px;
+        font-weight: 550;
+        font-size: 32px;
         --un-text-opacity: 1;
         color: rgb(106 106 106 / var(--un-text-opacity));
-
+        background: linear-gradient(to right, red, blue);
+        -webkit-background-clip: text; /* 将渐变应用于文本 */
+        -webkit-text-fill-color: transparent; /* 设置文本颜色为透明 */
         .logo {
           width: 50px;
           height: 50px;
@@ -123,6 +236,17 @@ const form = reactive({
           background-color: #bfbfbf;
         }
       }
+
+      .title-info {
+        display: block;
+        margin-top: 24px;
+        font-size: 18px;
+      }
+    }
+
+    .login-form-data {
+      padding: 32px 20px;
+      width: 330px;
 
       .el-form {
         .el-form-item {
@@ -135,7 +259,7 @@ const form = reactive({
         }
 
         .el-form-item:nth-child(1) {
-          margin-top: 32px;
+          margin-top: 20px;
         }
 
         .el-form-item:nth-child(n + 2) {
