@@ -1,34 +1,28 @@
 <script setup lang="ts" name="Login">
 import { reactive, ref } from 'vue'
 import { Key, Lock, User } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules, TabPaneName } from 'element-plus'
-import { genNanoId } from '@/utils/util'
+import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
+import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
+import { genNanoId, getGreeting } from '@/utils/util'
+import useUserStore from '@/store/modules/sysUser'
 
 const title = import.meta.env.VITE_APP_TITLE
-const loginType = 'password'
+
+// 获取userStore
+const userStore = useUserStore()
 
 // 密码登入表单
-interface normalFormInter {
-  username: string
-  password: string
-  captcha: string
-  rememberMe: boolean
-  loginType: string
-  // 密码登入的验证码key
-  uuid: string
-}
-
-const normalForm = reactive<normalFormInter>({
+const normalForm = reactive<NormalLoginForm>({
   username: '',
   password: '',
   captcha: '',
   rememberMe: true,
-  loginType: loginType,
+  loginType: 'normal',
   // 密码登入的验证码key
   uuid: genNanoId()
 })
 const ruleNormalForm = ref<FormInstance>()
-const normalFormRules = reactive<FormRules<normalFormInter>>({
+const normalFormRules = reactive<FormRules<NormalLoginForm>>({
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
     { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
@@ -44,21 +38,14 @@ const normalFormRules = reactive<FormRules<normalFormInter>>({
 })
 
 // 短信登入类型
-interface smsFormInter {
-  username: string
-  captcha: string
-  rememberMe: boolean
-  loginType: string
-}
-
-const smsForm = reactive<smsFormInter>({
+const smsForm = reactive<SmsLoginForm>({
   username: '',
   captcha: '',
   rememberMe: true,
-  loginType: loginType
+  loginType: 'sms'
 })
 const ruleSmsForm = ref<FormInstance>()
-const smsFormRules = reactive<FormRules<smsFormInter>>({
+const smsFormRules = reactive<FormRules<SmsLoginForm>>({
   username: [
     { required: true, message: '请输入手机号', trigger: 'blur' },
     { min: 11, max: 11, message: '长度为 11 个字符', trigger: 'blur' },
@@ -72,11 +59,31 @@ const smsFormRules = reactive<FormRules<smsFormInter>>({
 })
 
 // 切换登入类型
-const activeTabName = ref<string>(loginType)
-const handleTabClick = (name: TabPaneName): void => {
-  if (typeof name === 'string') {
-    normalForm.loginType = name
-    smsForm.loginType = name
+const activeTabName = ref<string>('normal')
+
+// 登入请求
+const submitLogin = async () => {
+  let ruleForm
+  let formData
+  // 根据不同的类型去校验不同的表单对象
+  if (activeTabName.value === 'normal') {
+    ruleForm = ruleNormalForm
+    formData = normalForm
+  } else {
+    ruleForm = ruleSmsForm
+    formData = smsForm
+  }
+  // 校验参数
+  await ruleForm.value?.validate()
+
+  // 进行登入
+  let result = await userStore.login(formData)
+  if (result) {
+    ElNotification({
+      type: 'success',
+      message: '登入成功',
+      title: `HI,${getGreeting()}`
+    })
   }
 }
 </script>
@@ -96,8 +103,8 @@ const handleTabClick = (name: TabPaneName): void => {
       </div>
       <!--   表单区域   -->
       <div class="login-form-data">
-        <el-tabs v-model="activeTabName" @tab-change="handleTabClick">
-          <el-tab-pane label="密码登录" name="password">
+        <el-tabs v-model="activeTabName">
+          <el-tab-pane label="密码登录" name="normal">
             <el-form
               ref="ruleNormalForm"
               :rules="normalFormRules"
@@ -105,6 +112,7 @@ const handleTabClick = (name: TabPaneName): void => {
               size="large"
               label-width="auto"
               status-icon
+              style="width: 100%"
             >
               <!--用户名-->
               <el-form-item prop="username">
@@ -124,6 +132,7 @@ const handleTabClick = (name: TabPaneName): void => {
                   :prefix-icon="Key"
                   v-model="normalForm.captcha"
                   style="flex: 1"
+                  maxlength="4"
                   placeholder="验证码"
                 />
                 <div class="captcha">验证码</div>
@@ -133,7 +142,7 @@ const handleTabClick = (name: TabPaneName): void => {
                 <el-checkbox v-model="normalForm.rememberMe">记住我</el-checkbox>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" style="width: 100%">登录</el-button>
+                <el-button type="primary" style="width: 100%" @click="submitLogin">登录</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
