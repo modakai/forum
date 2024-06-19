@@ -65,9 +65,13 @@ public class SpecCaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    public void validateCaptcha(String username, String captcha) {
+    public void validateCaptcha(String key, String captcha) {
+        if (StringUtils.isBlank(key)) {
+            throw new ServiceException("验证码的key不能为空");
+        }
+
         // 1 从redis中获取数据
-        String redisCaptcha = redisUtil.getCacheObject(KEY_PREFIX + username);
+        String redisCaptcha = redisUtil.getCacheObject(KEY_PREFIX + key);
         if (StringUtils.isBlank(redisCaptcha)) {
             throw new ServiceException("验证码已过期，请重新获取");
         }

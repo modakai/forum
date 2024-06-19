@@ -32,7 +32,7 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
 
         // 验证码校验
         CaptchaService captchaService = captchaFactory.createCaptchaGenerator(formData.getLoginType());
-        captchaService.validateCaptcha(formData.getUsername(), formData.getCaptcha());
+        captchaService.validateCaptcha(formData.getKey(), formData.getCaptcha());
 
         String loginType = formData.getLoginType();
         // 查询用户信息
