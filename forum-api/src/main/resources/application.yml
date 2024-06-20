@@ -89,3 +89,4 @@ logging:
     org.springframework: info
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss
+  config: classpath:logback.xml
