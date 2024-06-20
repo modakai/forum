@@ -2,6 +2,7 @@ package com.sakura.forum.framework.web.service.syslogin.impl;
 
 import com.sakura.forum.core.domain.dto.SysUserLoginDto;
 import com.sakura.forum.core.domain.entity.SysUser;
+import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.exception.ServiceException;
 import com.sakura.forum.framework.factory.captcha.CaptchaFactory;
 import com.sakura.forum.framework.web.service.captcha.CaptchaService;
@@ -39,10 +40,10 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
         SysUser sysUser = sysUserMapper.selectSysUserByUsernameOrPhone(loginType, formData.getUsername());
         // 是否不存在对应的用户
         if (sysUser == null) {
-            throw new ServiceException("用户不存在");
+            throw new ServiceException(ResultCodeEnum.USER_IS_NOT_EXIST);
         }
 
-        // 判断密码 这里的加密算法太慢了
+        // 判断密码
         passwordService.validate(formData.getPassword(), sysUser.getPassword());
 
         // 判断状态

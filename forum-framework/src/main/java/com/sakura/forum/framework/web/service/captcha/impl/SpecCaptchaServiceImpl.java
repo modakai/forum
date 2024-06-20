@@ -7,13 +7,9 @@ import com.sakura.forum.framework.web.service.captcha.CaptchaService;
 import com.sakura.forum.framework.web.service.captcha.config.CaptchaProperties;
 import com.sakura.forum.utils.RedisUtil;
 import io.springboot.captcha.SpecCaptcha;
-import io.springboot.captcha.utils.CaptchaJakartaUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,13 +33,12 @@ public class SpecCaptchaServiceImpl implements CaptchaService {
 
 
     @Override
-    public void generateCaptcha(CaptchaDto params, HttpServletRequest request, HttpServletResponse response) {
+    public String generateCaptcha(CaptchaDto params) {
         // 生成 spec 的 验证码
         SpecCaptcha specCaptcha = new SpecCaptcha(captchaProperties.getWidth(), captchaProperties.getHeight(), captchaProperties.getLen());
         specCaptcha.setCharType(captchaProperties.getFont());
 
         //  保存到redis
-
         redisUtil.setCacheObject(
                 KEY_PREFIX + params.getKey(),
                 specCaptcha.text(),
@@ -51,12 +46,7 @@ public class SpecCaptchaServiceImpl implements CaptchaService {
                 TimeUnit.SECONDS
         );
 
-        try {
-            // 导出验证码
-            CaptchaJakartaUtil.out(specCaptcha, request, response);
-        } catch (IOException e) {
-            throw new ServiceException("验证码生成失败");
-        }
+        return specCaptcha.toBase64();
     }
 
     @Override

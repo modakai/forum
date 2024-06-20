@@ -1,5 +1,7 @@
 // 用户请求参数
 
+import type { ResponseData } from '@/api/types'
+
 /**
  * 密码登入的请求参数接口
  */
@@ -9,7 +11,7 @@ export interface NormalLoginForm {
   captcha: string
   loginType: 'normal'
   // 密码登入的验证码key
-  uuid: string
+  key: string
   rememberMe: boolean
 }
 
@@ -21,4 +23,9 @@ export interface SmsLoginForm {
   captcha: string
   loginType: 'sms'
   rememberMe: boolean
+}
+
+//定义登录接口返回数据类型
+export interface LoginResponseData extends ResponseData {
+  data: string
 }

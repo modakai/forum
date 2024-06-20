@@ -1,12 +1,11 @@
 package com.sakura.forum.web.controller.common;
 
+import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.core.domain.dto.CaptchaDto;
 import com.sakura.forum.framework.factory.captcha.CaptchaFactory;
 import com.sakura.forum.framework.web.service.captcha.CaptchaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springdoc.core.annotations.ParameterObject;
@@ -32,12 +31,11 @@ public class CaptchaController {
 
     @Operation(summary = "获取验证码")
     @GetMapping
-    public void generateCaptcha(@ParameterObject CaptchaDto params,
-                                HttpServletRequest request,
-                                HttpServletResponse response) {
+    public SaResult generateCaptcha(@ParameterObject CaptchaDto params) {
         // 1，使用工程创建对应的验证码类型结合配置文件
         CaptchaService captchaService = captchaFactory.createCaptchaGenerator(params.getType());
         // 2，调用服务
-        captchaService.generateCaptcha(params, request, response);
+        String base64captcha = captchaService.generateCaptcha(params);
+        return SaResult.ok().setData(base64captcha);
     }
 }

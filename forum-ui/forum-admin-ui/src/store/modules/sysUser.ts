@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { UserState } from '@/store/modules/types/types'
 import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
 import { setLocalToken, setSessionToken } from '@/utils/tokenUtil'
+import { login } from '@/api/user'
 
 /**
  * 用户状态仓库
@@ -10,7 +11,7 @@ const useUserStore = defineStore('forum-sys-user', {
   state(): UserState {
     return {
       // 记住我标识
-      rememberMe: true,
+      rememberMe: false,
       // 用户信息
       userInfo: {},
       // token
@@ -24,20 +25,24 @@ const useUserStore = defineStore('forum-sys-user', {
      */
     async login(formData: NormalLoginForm | SmsLoginForm) {
       // 根据传递过来的rememberMe 做事情
-      this.rememberMe = formData.rememberMe
+      // this.rememberMe = formData.rememberMe
 
-      // 模拟登入成功
-      console.log('登入请求')
-      // rememberMe = true 就是持久化存储 token
-      this.token = 'token'
-      if (this.rememberMe) {
-        setLocalToken(this.token)
+      const response = await login(formData)
+      console.log('登入响应', response)
+      if (response.code === 200) {
+        console.log('1')
+        // rememberMe = true 就是持久化存储 token
+        this.token = response.data
+        if (this.rememberMe) {
+          setLocalToken(this.token)
+        } else {
+          setSessionToken(this.token)
+        }
+        return true
       } else {
-        setSessionToken(this.token)
+        console.log(2)
+        return Promise.reject(new Error(response.msg))
       }
-      return new Promise((resolve, reject) => {
-        resolve(true)
-      })
     }
   }
 })

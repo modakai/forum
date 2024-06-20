@@ -5,6 +5,7 @@ import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
 import { genNanoId, getGreeting } from '@/utils/util'
 import useUserStore from '@/store/modules/sysUser'
+import { getCaptcha } from '@/api/captcha'
 
 const title = import.meta.env.VITE_APP_TITLE
 
@@ -19,7 +20,7 @@ const normalForm = reactive<NormalLoginForm>({
   rememberMe: true,
   loginType: 'normal',
   // 密码登入的验证码key
-  uuid: genNanoId()
+  key: genNanoId()
 })
 const ruleNormalForm = ref<FormInstance>()
 const normalFormRules = reactive<FormRules<NormalLoginForm>>({
@@ -76,28 +77,36 @@ const submitLogin = async () => {
   // 校验参数
   await ruleForm.value?.validate()
 
-  // 进行登入
-  let result = await userStore.login(formData)
-  if (result) {
+  try {
+    await userStore.login(formData)
     ElNotification({
       type: 'success',
       message: '登入成功',
       title: `HI,${getGreeting()}`
+    })
+  } catch (e) {
+    ElNotification({
+      type: 'error',
+      message: (e as Error).message
     })
   }
 }
 
 const captchaUrl = ref<string>('')
 // 刷新验证码
-const refreshCaptcha = () => {
-  // 重新刷新uuid
-  normalForm.uuid = genNanoId()
+const refreshCaptcha = async (key: string, loginType: string) => {
   // 发起请求更换验证码
-  captchaUrl.value = `/api/captcha?key=${normalForm.uuid}&type=${normalForm.loginType}`
+  const response = await getCaptcha(key, loginType)
+  if (response.code === 200) {
+    if (response.msg.indexOf('data:image') > -1) {
+      captchaUrl.value = response.msg
+    } else {
+      captchaUrl.value = 'data:image/png;base64,' + response.msg
+    }
+  }
 }
-// 挂载的时候调用
 onMounted(() => {
-  refreshCaptcha()
+  refreshCaptcha(normalForm.key, normalForm.loginType)
 })
 </script>
 
@@ -153,7 +162,7 @@ onMounted(() => {
                   :src="captchaUrl"
                   class="captcha"
                   alt="看不起？切换验证码"
-                  @click="refreshCaptcha"
+                  @click="refreshCaptcha(normalForm.key, normalForm.loginType)"
                 />
               </el-form-item>
               <el-form-item>

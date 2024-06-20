@@ -1,6 +1,6 @@
 package com.sakura.forum.framework.web.exception;
 
-import com.sakura.forum.core.AjaxResult;
+import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.exception.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -25,45 +25,44 @@ public class GlobalExceptionHandler {
      * 请求方式不支持
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public AjaxResult<String> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e,
-                                                                  HttpServletRequest request) {
+    public SaResult handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e,
+                                                        HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',不支持'{}'请求", requestURI, e.getMethod());
-        return AjaxResult.fail(e.getMessage());
+        return SaResult.error(e.getMessage());
     }
 
     @ExceptionHandler(ServiceException.class)
-    public AjaxResult<String> handlerServiceException(ServiceException e) {
+    public SaResult handlerServiceException(ServiceException e) {
         log.error("业务异常：{}", e.getMessage(), e);
-        Integer code = e.getCode();
-        return code != null ? AjaxResult.fail(e.getCode(), e.getMsg(), null) : AjaxResult.fail(e.getMsg());
+        return SaResult.error(e.getMsg()).setCode(e.getCode());
     }
 
     /**
      * 拦截未知的运行时异常
      */
     @ExceptionHandler(RuntimeException.class)
-    public AjaxResult<String> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
+    public SaResult handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生未知异常.", requestURI, e);
-        return AjaxResult.fail(e.getMessage());
+        return SaResult.error(e.getMessage());
     }
 
     /**
      * 系统异常
      */
     @ExceptionHandler(Exception.class)
-    public AjaxResult<String> handleException(Exception e, HttpServletRequest request) {
+    public SaResult handleException(Exception e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.fail(e.getMessage());
+        return SaResult.error(e.getMessage());
     }
 
     /**
      * 请求参数类型不匹配
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public AjaxResult<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
+    public SaResult handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         String errorMessage = String.format(
                 "参数类型不匹配: 参数 '%s' 需要是 '%s' 类型，但提供了 '%s'",
@@ -73,7 +72,7 @@ public class GlobalExceptionHandler {
         );
 
         log.error("请求参数类型不匹配'{}',发生系统异常.", requestURI, e);
-        return AjaxResult.fail(errorMessage);
+        return SaResult.error(errorMessage);
     }
 
 }

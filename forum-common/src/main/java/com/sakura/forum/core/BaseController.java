@@ -1,6 +1,6 @@
 package com.sakura.forum.core;
 
-import com.sakura.forum.enums.ResultCodeEnum;
+import cn.dev33.satoken.util.SaResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,29 +15,35 @@ public class BaseController {
      */
     protected static final Logger log = LoggerFactory.getLogger(BaseController.class);
 
-    protected <T> AjaxResult<T> success() {
-        return AjaxResult.success();
+    public SaResult success() {
+        return SaResult.ok();
     }
 
-    protected <T> AjaxResult<T> success(String msg) {
-        return AjaxResult.success(msg);
+    protected SaResult success(String msg) {
+        return SaResult.ok(msg);
     }
 
-    protected <T> AjaxResult<T> success(T data) {
-        return AjaxResult.success(data);
+    protected SaResult success(Object data) {
+        return SaResult.data(data);
     }
 
-    protected <T> AjaxResult<T> fail() {
-        return AjaxResult.fail();
+    protected SaResult success(int code, String msg, Object data) {
+        return SaResult.ok(msg).setData(data).setCode(code);
     }
 
-    protected <T> AjaxResult<T> fail(String msg) {
-        return AjaxResult.fail(msg);
+    protected SaResult fail() {
+        return SaResult.error();
     }
 
-    protected <T> AjaxResult<T> fail(ResultCodeEnum resultCodeEnum) {
-        return AjaxResult.fail(resultCodeEnum);
+    protected SaResult fail(String msg) {
+        return SaResult.error(msg);
     }
 
-
+    protected SaResult fail(int code, String msg) {
+        return fail(code, msg, null);
+    }
+    
+    protected SaResult fail(int code, String msg, Object data) {
+        return SaResult.error().setCode(code).setData(data).setMsg(msg);
+    }
 }

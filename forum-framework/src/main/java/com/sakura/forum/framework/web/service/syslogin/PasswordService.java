@@ -21,6 +21,11 @@ public class PasswordService {
     // 默认盐 就是16
     private static final Argon2 argon2 = Argon2Factory.create();
 
+    public static void main(String[] args) {
+        PasswordService passwordService = new PasswordService();
+        System.out.println(passwordService.encryption("123abc"));
+    }
+
     /**
      * 使用 BCrypt 进行加密
      *

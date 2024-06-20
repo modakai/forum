@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum ResultCodeEnum {
     SUCCESS(200, "操作成功"),
     FAIL(500, "操作失败"),
+    // 用户不存在
+    USER_IS_NOT_EXIST(404, "用户不存在"),
     WARN(501, "警告");
 
     /**
