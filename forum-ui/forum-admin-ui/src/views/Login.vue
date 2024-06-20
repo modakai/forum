@@ -98,10 +98,10 @@ const refreshCaptcha = async (key: string, loginType: string) => {
   // 发起请求更换验证码
   const response = await getCaptcha(key, loginType)
   if (response.code === 200) {
-    if (response.msg.indexOf('data:image') > -1) {
-      captchaUrl.value = response.msg
+    if (response.data.indexOf('data:image') > -1) {
+      captchaUrl.value = response.data
     } else {
-      captchaUrl.value = 'data:image/png;base64,' + response.msg
+      captchaUrl.value = 'data:image/png;base64,' + response.data
     }
   }
 }
