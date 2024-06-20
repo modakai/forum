@@ -1,5 +1,5 @@
 <script setup lang="ts" name="Login">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { Key, Lock, User } from '@element-plus/icons-vue'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
@@ -86,6 +86,19 @@ const submitLogin = async () => {
     })
   }
 }
+
+const captchaUrl = ref<string>('')
+// 刷新验证码
+const refreshCaptcha = () => {
+  // 重新刷新uuid
+  normalForm.uuid = genNanoId()
+  // 发起请求更换验证码
+  captchaUrl.value = `/api/captcha?key=${normalForm.uuid}&type=${normalForm.loginType}`
+}
+// 挂载的时候调用
+onMounted(() => {
+  refreshCaptcha()
+})
 </script>
 
 <template>
@@ -135,7 +148,13 @@ const submitLogin = async () => {
                   maxlength="4"
                   placeholder="验证码"
                 />
-                <div class="captcha">验证码</div>
+
+                <img
+                  :src="captchaUrl"
+                  class="captcha"
+                  alt="看不起？切换验证码"
+                  @click="refreshCaptcha"
+                />
               </el-form-item>
               <el-form-item>
                 <!--   记住我   -->
@@ -276,12 +295,11 @@ const submitLogin = async () => {
         }
       }
 
-      // 验证码
       .captcha {
         width: 80px;
+        height: 40px;
         margin-left: 12px;
         cursor: pointer;
-        background-color: red;
       }
     }
   }

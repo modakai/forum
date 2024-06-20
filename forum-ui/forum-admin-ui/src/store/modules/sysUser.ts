@@ -22,7 +22,7 @@ const useUserStore = defineStore('forum-sys-user', {
      * 登入请求
      * @param formData 登入参数
      */
-    login(formData: NormalLoginForm | SmsLoginForm) {
+    async login(formData: NormalLoginForm | SmsLoginForm) {
       // 根据传递过来的rememberMe 做事情
       this.rememberMe = formData.rememberMe
 
