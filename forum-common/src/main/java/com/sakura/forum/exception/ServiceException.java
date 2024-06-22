@@ -10,7 +10,7 @@ import lombok.Getter;
 public final class ServiceException extends BaseException {
 
     public ServiceException(String msg) {
-        super(null, msg);
+        super(500, msg);
     }
 
     public ServiceException(Integer code, String msg) {
