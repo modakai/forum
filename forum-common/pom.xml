@@ -77,7 +77,7 @@
         <!-- Sa-Token 整合 Redis （使用 jdk 默认序列化方式） -->
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-redis</artifactId>
+            <artifactId>sa-token-redis-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

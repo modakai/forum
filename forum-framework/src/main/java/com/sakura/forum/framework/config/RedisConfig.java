@@ -14,7 +14,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @author modakai
  */
 @Configuration
-@Order(1)
 public class RedisConfig {
 
     /**
@@ -24,7 +23,7 @@ public class RedisConfig {
      */
 //    @Bean(name = "customRedisTemplate")
     @Bean
-    @Order(1)
+    @Order(0)
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
