@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class SysLoginController {
     // todo 后续使用工厂加策略模式优化
     @Operation(summary = "登录接口", description = "登录接口")
     @PostMapping("login")
-    public SaResult login(@RequestBody SysUserLoginDto formData) {
+    public SaResult login(@RequestBody @Validated SysUserLoginDto formData) {
         String token = sysLoginService.login(formData);
         return SaResult.data(token);
     }

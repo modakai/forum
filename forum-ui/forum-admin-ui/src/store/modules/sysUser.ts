@@ -25,12 +25,9 @@ const useUserStore = defineStore('forum-sys-user', {
      */
     async login(formData: NormalLoginForm | SmsLoginForm) {
       // 根据传递过来的rememberMe 做事情
-      // this.rememberMe = formData.rememberMe
-
+      this.rememberMe = formData.rememberMe
       const response = await login(formData)
-      console.log('登入响应', response)
       if (response.code === 200) {
-        console.log('1')
         // rememberMe = true 就是持久化存储 token
         this.token = response.data
         if (this.rememberMe) {
@@ -40,7 +37,6 @@ const useUserStore = defineStore('forum-sys-user', {
         }
         return true
       } else {
-        console.log(2)
         return Promise.reject(new Error(response.msg))
       }
     }

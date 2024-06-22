@@ -31,4 +31,7 @@ public class SysUserLoginDto {
     @Schema(name = "key", description = "验证码的key")
     private String key;
 
+    @Schema(name = "rememberMe", description = "是否记住我")
+    private Boolean rememberMe;
+
 }

@@ -53,7 +53,7 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
         }
 
         // 进行登入
-        StpKit.ADMIN.login(sysUser.getId());
+        StpKit.ADMIN.login(sysUser.getId(), formData.getRememberMe());
 
         // 缓存用户信息
         LoginUserUtil.cacheLoginUser(sysUser, sysUser.getId());
