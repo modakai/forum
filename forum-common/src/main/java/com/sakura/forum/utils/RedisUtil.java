@@ -16,7 +16,7 @@ public class RedisUtil {
 
     public final RedisTemplate redisTemplate;
 
-    public RedisUtil(@Qualifier("customRedisTemplate") RedisTemplate redisTemplate) {
+    public RedisUtil(@Qualifier("redisTemplate") RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

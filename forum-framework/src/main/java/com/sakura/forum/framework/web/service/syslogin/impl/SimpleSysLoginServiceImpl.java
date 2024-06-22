@@ -10,6 +10,7 @@ import com.sakura.forum.framework.web.service.syslogin.PasswordService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import com.sakura.forum.security.StpKit;
 import com.sakura.forum.system.mapper.SysUserMapper;
+import com.sakura.forum.utils.LoginUserUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -53,6 +54,10 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
 
         // 进行登入
         StpKit.ADMIN.login(sysUser.getId());
+
+        // 缓存用户信息
+        LoginUserUtil.cacheLoginUser(sysUser, sysUser.getId());
+
         // 获取token
         String token = StpKit.ADMIN.getTokenValue();
         // 删除验证码

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sakura.forum.system.mapper.SysMenuMapper">
+
+    <resultMap id="MenuRoleDto" type="com.sakura.forum.core.domain.dto.MenuRoleDto">
+        <result column="role_id" property="roleId"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="menu_perms" property="menuPerms"/>
+        <result column="role_key" property="roleKey"/>
+    </resultMap>
+    <!-- 返回角色菜单权限 -->
+    <select id="selectMenuPerms" resultMap="MenuRoleDto">
+        select r.role_key, m.perms as menu_perms
+        from sys_menu m
+        left join sys_role_menu rm on rm.menu_id = m.id
+        left join sys_user_role ur on ur.role_id = rm.role_id
+        left join sys_role r on r.id = rm.role_id
+        <where>
+            <if test="userId != null">
+                ur.user_id = #{userId}
+            </if>
+            and m.status = 0 and m.perms != ''
+        </where>
+    </select>
+</mapper>

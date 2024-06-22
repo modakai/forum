@@ -59,7 +59,6 @@ spring:
           min-idle: 1
           max-wait: -1ms
 
-
 # MP 配置
 mybatis-plus:
   configuration:
@@ -90,3 +89,7 @@ logging:
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss
   config: classpath:logback.xml
+
+sa-token:
+  is-log: true
+  is-print: false

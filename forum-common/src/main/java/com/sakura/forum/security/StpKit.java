@@ -23,9 +23,5 @@ public class StpKit {
      */
     public static final StpLogic USER = new StpLogic("user");
 
-    /**
-     * XX 会话对象，（项目中有多少套账号表，就声明几个 StpLogic 会话对象）
-     */
-    public static final StpLogic XXX = new StpLogic("xx");
 
 }
