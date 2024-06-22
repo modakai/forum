@@ -52,6 +52,8 @@ public class SysLoginController {
         Set<String> roleList = permissionService.getRolePermission(sysUser);
         List<String> permission = permissionService.getMenuPermission(sysUser);
 
+        result.setRoles(roleList);
+        result.setPermissions(permission);
 
         return SaResult.ok().setData(result);
     }

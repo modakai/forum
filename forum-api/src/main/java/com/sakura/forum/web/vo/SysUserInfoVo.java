@@ -3,6 +3,7 @@ package com.sakura.forum.web.vo;
 import com.sakura.forum.core.domain.entity.SysUser;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class SysUserInfoVo {
     private SysUser user;
 
     private List<String> permissions;
-    private List<String> roles;
+    private Collection<String> roles;
 
     public SysUserInfoVo(SysUser user, List<String> permissions, List<String> roles) {
         this.user = user;
@@ -34,11 +35,11 @@ public class SysUserInfoVo {
         this.permissions = permissions;
     }
 
-    public List<String> getRoles() {
+    public Collection<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(Collection<String> roles) {
         this.roles = roles;
     }
 

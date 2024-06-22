@@ -31,8 +31,10 @@ public class LoginUserUtil {
             throw new ServiceException("用户不能为空");
 
         if (user instanceof SysUser) {
-            SaSession session = StpKit.ADMIN.getSession();
-            session.set(SYS_USER_KEY, user);
+            SaSession session = StpKit.ADMIN.getSessionByLoginId(id);
+            new Thread(() -> {
+                session.set(SYS_USER_KEY, user);
+            }).start();
         }
     }
 }
