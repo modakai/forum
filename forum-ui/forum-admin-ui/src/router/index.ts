@@ -20,12 +20,29 @@ import { createRouter, createWebHistory } from 'vue-router'
  }
  */
 
-// 公告路由
+// 公共路由
 export const constantsRoutes = [
   {
     path: '/login',
     component: () => import('@/views/Login.vue'),
-    hidden: true
+    meta: { title: '登入页', hidden: true }
+  },
+  {
+    path: '/',
+    component: () => import('@/views/home/index.vue'),
+    meta: { title: '首页', icon: 'dashboard', hidden: false }
+  },
+  {
+    path: '/system',
+    component: () => import('@/views/home/index.vue'),
+    meta: { title: '系统管理', icon: 'dashboard', hidden: false },
+    children: [
+      {
+        path: '/system/user',
+        component: () => import('@/views/home/index.vue'),
+        meta: { title: '用户管理', icon: 'dashboard', hidden: false }
+      }
+    ]
   }
 ]
 

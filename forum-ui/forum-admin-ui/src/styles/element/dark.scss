@@ -1,0 +1,34 @@
+/**
+  深色主题
+ */
+@forward 'element-plus/theme-chalk/src/dark/var.scss' with (
+  $colors: (
+    'primary': (
+       'base': #598B8E
+    ),
+    'success': (
+      'base': #38A169
+    ),
+    'warning': (
+      'base': #F59E0B
+    ),
+    'danger': (
+      'base': #DC2626
+    ),
+    'error': (
+      'base': #E88181
+    ),
+    'info': (
+      'base': #2D59C9
+    )
+  ),
+  $text-color: (
+    'primary': #ECEEF0,
+    'regular': #AEBACF,
+    'secondary': #858DAA,
+    'placeholder': #737D95,
+    'disabled': #666E87
+  ),
+);
+
+@use "element-plus/theme-chalk/src/dark/css-vars" as *;

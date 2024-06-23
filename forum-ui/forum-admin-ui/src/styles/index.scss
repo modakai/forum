@@ -1,6 +1,7 @@
 @import "reset";
-@import 'element/light.css';
-@import "element/dark.css";
+//@import 'element/light.css';
+//@import "element/dark.css";
+
 
 html,
 body {
@@ -79,4 +80,12 @@ body {
 
 .hidden {
   display: none;
+}
+
+.w-64 {
+  width: 64px;
+}
+
+.w-200 {
+  width: 200px;
 }
