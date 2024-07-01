@@ -13,10 +13,6 @@ const Layout = computed(() => {
 
 <template>
   <el-config-provider :locale="elConfig.locale" :z-index="elConfig.zIndex">
-    <router-view v-if="Layout" v-slot="{ Component, route: curRoute }">
-      <component :is="Layout">
-        <component :is="Component" :key="curRoute.fullPath" />
-      </component>
-    </router-view>
+    <router-view></router-view>
   </el-config-provider>
 </template>

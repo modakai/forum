@@ -1,11 +1,13 @@
 package com.sakura.forum.web.controller.system;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.core.domain.dto.SysUserLoginDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.framework.web.service.permission.SysPermissionService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
+import com.sakura.forum.security.StpKit;
 import com.sakura.forum.utils.LoginUserUtil;
 import com.sakura.forum.web.vo.SysUserInfoVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,6 +59,13 @@ public class SysLoginController {
         result.setPermissions(permission);
 
         return SaResult.ok().setData(result);
+    }
+
+    @Operation(summary = "测试接口", description = "测试接口")
+    @GetMapping("/test")
+    @SaCheckPermission(type = StpKit.ADMIN_TYPE, value = "system.user.list", orRole = "normal-admin")
+    public SaResult test() {
+        return SaResult.ok();
     }
 
 

@@ -1,5 +1,6 @@
 package com.sakura.forum.framework.web.service.permission;
 
+import com.sakura.forum.constant.CommonConstant;
 import com.sakura.forum.constant.RedisCacheConstant;
 import com.sakura.forum.core.domain.dto.MenuRoleDto;
 import com.sakura.forum.core.domain.entity.SysUser;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class SysPermissionService {
 
+    private final String ADMIN_PERMISSION = CommonConstant.ADMIN_PERMISSION;
 
     @Resource
     private ISysRoleService roleService;
@@ -37,15 +39,17 @@ public class SysPermissionService {
         // 判断是否为 超级管理员
         if (user.isAdmin()) {
             // 上帝角色
-            rolePerms.add("*");
+            rolePerms.add(ADMIN_PERMISSION);
         } else {
             // 去查询用户的角色
+            // TODO 先尝试从缓存获取
             List<String> roleList = roleService.searchRolePerms(user);
+
+            // 缓存角色列表 set 集合存储
+            redisUtil.setCacheList(RedisCacheConstant.ROLE_KEY + user.getId(), roleList);
+
             rolePerms.addAll(roleList);
         }
-
-        // 缓存角色列表 set 集合存储
-        redisUtil.setCacheSet(RedisCacheConstant.ROLE_KEY + user.getId(), rolePerms);
 
         return rolePerms;
     }
@@ -62,24 +66,23 @@ public class SysPermissionService {
         if (user.isAdmin()) {
             // 上帝权限
             MenuRoleDto menuRoleDto = new MenuRoleDto();
-            menuRoleDto.setMenuPerms("*");
-            menuRoleDto.setRoleKey("*");
+            menuRoleDto.setMenuPerms(ADMIN_PERMISSION);
+            menuRoleDto.setRoleKey(ADMIN_PERMISSION);
 
             menuRoleList.add(menuRoleDto);
         } else {
             // 去查询用户的菜单
             menuRoleList.addAll(menuService.searchMenuPerms(user));
+            // 根据 roleKey进行权限分组
+            Map<String, Set<String>> rolePerms = menuRoleList.stream().collect(
+                    // 根据 roleKey进行权限分组
+                    Collectors.groupingBy(MenuRoleDto::getRoleKey,
+                            // 获取菜单权限
+                            Collectors.mapping(MenuRoleDto::getMenuPerms, Collectors.toSet())));
+            // 缓存
+            redisUtil.setCacheMap(RedisCacheConstant.PERMISSION_KEY, rolePerms);
         }
 
-        // 缓存
-        // 根据 roleKey进行权限分组
-        Map<String, Set<String>> rolePerms = menuRoleList.stream().collect(
-                // 根据 roleKey进行权限分组
-                Collectors.groupingBy(MenuRoleDto::getRoleKey,
-                        // 获取菜单权限
-                        Collectors.mapping(MenuRoleDto::getMenuPerms, Collectors.toSet())));
-        // 缓存
-        redisUtil.setCacheMap("role:perms", rolePerms);
 
         return menuRoleList.stream().map(MenuRoleDto::getMenuPerms).toList();
     }

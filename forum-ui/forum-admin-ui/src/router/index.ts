@@ -29,20 +29,8 @@ export const constantsRoutes = [
   },
   {
     path: '/',
-    component: () => import('@/views/home/index.vue'),
-    meta: { title: '首页', icon: 'dashboard', hidden: false }
-  },
-  {
-    path: '/system',
-    component: () => import('@/views/home/index.vue'),
-    meta: { title: '系统管理', icon: 'dashboard', hidden: false },
-    children: [
-      {
-        path: '/system/user',
-        component: () => import('@/views/home/index.vue'),
-        meta: { title: '用户管理', icon: 'dashboard', hidden: false }
-      }
-    ]
+    component: () => import('@/layout/normal/index.vue'),
+    meta: { hidden: true }
   }
 ]
 
