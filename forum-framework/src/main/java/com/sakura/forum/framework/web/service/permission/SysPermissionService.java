@@ -3,9 +3,12 @@ package com.sakura.forum.framework.web.service.permission;
 import com.sakura.forum.constant.CommonConstant;
 import com.sakura.forum.constant.RedisCacheConstant;
 import com.sakura.forum.core.domain.dto.MenuRoleDto;
+import com.sakura.forum.core.domain.entity.SysMenu;
 import com.sakura.forum.core.domain.entity.SysUser;
+import com.sakura.forum.core.domain.vo.Router;
 import com.sakura.forum.system.service.ISysMenuService;
 import com.sakura.forum.system.service.ISysRoleService;
+import com.sakura.forum.utils.LoginUserUtil;
 import com.sakura.forum.utils.RedisUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -85,5 +88,19 @@ public class SysPermissionService {
 
 
         return menuRoleList.stream().map(MenuRoleDto::getMenuPerms).toList();
+    }
+
+    /**
+     * 获取前端路由
+     *
+     * @return 返回前端对应的路由组件信息 {@link Router}
+     */
+    public List<Router> getRouters() {
+        // 1 获取当前登入的用户
+        Long userId = LoginUserUtil.getLoginSysUser().getId();
+        List<SysMenu> menuList = menuService.searchMenuTreeList(userId);
+
+        // 转化成前端需要的路由组件
+        return menuService.buildRouters(menuList);
     }
 }

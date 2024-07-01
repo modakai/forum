@@ -10,6 +10,48 @@
         <result column="menu_perms" property="menuPerms"/>
         <result column="role_key" property="roleKey"/>
     </resultMap>
+
+    <resultMap id="SysMenuResult" type="SysMenu">
+        <result column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="menu_name" property="menuName"/>
+        <result column="path" property="path"/>
+        <result column="perms" property="perms"/>
+        <result column="component" property="component"/>
+        <result column="icon" property="icon"/>
+        <result column="menu_type" property="menuType"/>
+        <result column="visible" property="visible"/>
+        <result column="status" property="status"/>
+        <result column="sort" property="sort"/>
+        <result column="is_external_link" property="isExternalLink"/>
+        <result column="remark" property="remark"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="columAll">
+        SELECT m.id,
+               m.parent_id,
+               m.menu_name,
+               m.path,
+               m.perms,
+               m.component,
+               m.icon,
+               m.menu_type,
+               m.visible,
+               m.status,
+               m.sort,
+               m.is_external_link,
+               m.remark,
+               m.create_by,
+               m.create_time,
+               m.update_by,
+               m.update_time
+        FROM sys_menu m
+    </sql>
+
     <!-- 返回角色菜单权限 -->
     <select id="selectMenuPerms" resultMap="MenuRoleDto">
         select r.role_key, m.perms as menu_perms
@@ -23,5 +65,25 @@
             </if>
             and m.status = 0 and m.perms != ''
         </where>
+    </select>
+
+    <!-- 返回角色菜单权限 -->
+    <select id="selectMenuListByUserId" resultMap="SysMenuResult">
+        <if test="userId != null and userId != 1">
+            <include refid="columAll"/>
+            LEFT JOIN sys_role_menu rm ON rm.menu_id = m.id
+            LEFT JOIN sys_user_role ur ON ur.role_id = rm.role_id
+            LEFT JOIN sys_role r ON r.id = rm.role_id
+            WHERE
+            ur.user_id = #{userId}
+            AND m.menu_type IN (0, 1) AND m.STATUS = 0
+            ORDER BY m.sort
+        </if>
+
+        <if test="userId != null and userId == 1">
+            <include refid="columAll"/>
+            WHERE m.menu_type IN (0, 1) AND m.STATUS = 0
+            ORDER by m.sort
+        </if>
     </select>
 </mapper>

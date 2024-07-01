@@ -5,6 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.core.domain.dto.SysUserLoginDto;
 import com.sakura.forum.core.domain.entity.SysUser;
+import com.sakura.forum.core.domain.vo.Router;
 import com.sakura.forum.framework.web.service.permission.SysPermissionService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import com.sakura.forum.security.StpKit;
@@ -34,7 +35,6 @@ public class SysLoginController {
         this.permissionService = permissionService;
     }
 
-
     // todo 后续使用工厂加策略模式优化
     @Operation(summary = "登录接口", description = "登录接口")
     @PostMapping("login")
@@ -61,9 +61,17 @@ public class SysLoginController {
         return SaResult.ok().setData(result);
     }
 
+
+    @Operation(summary = "获取路由信息", description = "获取路由信息")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Router.class)))
+    @GetMapping("/getRouters")
+    public SaResult getRouters() {
+        return SaResult.ok().setData(permissionService.getRouters());
+    }
+
     @Operation(summary = "测试接口", description = "测试接口")
     @GetMapping("/test")
-    @SaCheckPermission(type = StpKit.ADMIN_TYPE, value = "system.user.list", orRole = "normal-admin")
+    @SaCheckPermission(type = StpKit.ADMIN_TYPE, value = "system.user.list")
     public SaResult test() {
         return SaResult.ok();
     }
