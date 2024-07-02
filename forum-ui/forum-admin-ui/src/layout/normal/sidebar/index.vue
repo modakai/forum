@@ -11,7 +11,7 @@ import { constantsRoutes } from '@/router'
     <SideLogo class="side-logo" />
     <!--  菜单  -->
     <!--  菜单区域  -->
-    <el-scrollbar class="menu_scrollbar" style="margin-top: 10px">
+    <el-scrollbar class="menu_scrollbar" style="margin-top: 4px">
       <el-menu :collapse="false" :default-active="'/'">
         <SideMenu :menu-list="constantsRoutes" />
       </el-menu>

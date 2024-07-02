@@ -9,13 +9,14 @@ const collapsed = ref(false)
 
 <template>
   <div class="layout">
-    <aside :class="collapsed ? 'w-64' : 'w-200'" class="aside">
+    <aside :class="collapsed ? 'w-64' : 'w-220'" class="aside">
       <SideBar />
     </aside>
 
     <article class="article">
       <Header class="header" />
-      <slot />
+
+      <div class="main-container"></div>
     </article>
   </div>
 </template>

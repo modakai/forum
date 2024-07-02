@@ -30,7 +30,31 @@ export const constantsRoutes = [
   {
     path: '/',
     component: () => import('@/layout/normal/index.vue'),
-    meta: { hidden: true }
+    meta: { hidden: true },
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/home/index.vue'),
+        meta: { title: '首页', hidden: false, icon: 'dashboard' }
+      }
+    ]
+  },
+  {
+    path: '/1',
+    component: () => import('@/views/home/index.vue'),
+    meta: { title: '首页', hidden: true },
+    children: [
+      {
+        path: '/1',
+        component: () => import('@/views/home/index.vue'),
+        meta: { title: '首页1', hidden: false, icon: 'dashboard' }
+      },
+      {
+        path: '/2',
+        component: () => import('@/views/home/index.vue'),
+        meta: { title: '首页2', hidden: false, icon: 'dashboard' }
+      }
+    ]
   }
 ]
 

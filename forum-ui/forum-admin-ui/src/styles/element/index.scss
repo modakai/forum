@@ -19,6 +19,9 @@
       'base': #909399
     )
   ),
+  $menu: (
+    'item-height': 42px
+  )
 );
 
 @use "element-plus/theme-chalk/src/index.scss" as *;
