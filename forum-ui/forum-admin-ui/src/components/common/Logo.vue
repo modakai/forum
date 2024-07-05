@@ -1,12 +1,12 @@
-<script setup lang="ts"></script>
+<script lang="ts" setup></script>
 
 <template>
   <div class="h-40 w-40 rounded-4 bg-primary p-1/100">
-    <img src="@/assets/images/logo.jpg" alt="Logo" />
+    <img alt="Logo" src="@/assets/images/logo.jpg" />
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .h-40 {
   height: 40px;
 }
@@ -17,10 +17,6 @@
 
 .rounded-4 {
   border-radius: 4px;
-}
-
-.bg-primary {
-  background-color: var(--el-color-primary);
 }
 
 .p-1 {

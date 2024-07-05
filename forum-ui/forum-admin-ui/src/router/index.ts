@@ -25,34 +25,39 @@ export const constantsRoutes = [
   {
     path: '/login',
     component: () => import('@/views/Login.vue'),
-    meta: { title: '登入页', hidden: true }
+    meta: { title: '登入页', visible: false }
   },
   {
     path: '/',
     component: () => import('@/layout/normal/index.vue'),
-    meta: { hidden: true },
+    meta: { visible: false },
     children: [
       {
         path: '/',
         component: () => import('@/views/home/index.vue'),
-        meta: { title: '首页', hidden: false, icon: 'dashboard' }
+        meta: { title: '首页', visible: true, icon: 'dashboard' }
       }
     ]
   },
   {
-    path: '/1',
-    component: () => import('@/views/home/index.vue'),
-    meta: { title: '首页', hidden: true },
+    path: '/system',
+    component: () => import('@/layout/normal/index.vue'),
+    meta: { title: '系统管理' },
     children: [
       {
-        path: '/1',
-        component: () => import('@/views/home/index.vue'),
-        meta: { title: '首页1', hidden: false, icon: 'dashboard' }
+        path: '/system/user',
+        component: () => import('@/views/system/user/index.vue'),
+        meta: { title: '用户管理', icon: '', visible: true }
       },
       {
-        path: '/2',
-        component: () => import('@/views/home/index.vue'),
-        meta: { title: '首页2', hidden: false, icon: 'dashboard' }
+        path: '/system/role',
+        component: () => import('@/views/system/role/index.vue'),
+        meta: { title: '角色管理', icon: '', visible: true }
+      },
+      {
+        path: '/system/menu',
+        component: () => import('@/views/system/menu/index.vue'),
+        meta: { title: '菜单管理', icon: '', visible: true }
       }
     ]
   }

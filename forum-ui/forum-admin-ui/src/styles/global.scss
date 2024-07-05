@@ -1,0 +1,28 @@
+
+.text-22 {
+  font-size: 22px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-all-300 {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-duration: .3s;
+}
+
+.p-6 {
+  padding: 6px;
+}
+
+.rounded-4 {
+  border-radius: 4px;
+}
+
+.f-c-c, [f-c-c=""] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

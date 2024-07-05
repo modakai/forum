@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed } from 'vue'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   className: '',
-  color: ''
+  color: '#000'
 })
 
 // icon的名字
@@ -26,11 +26,11 @@ const svgClass = computed(() => {
 
 <template>
   <svg :class="svgClass" aria-hidden="true">
-    <use :xlink:href="iconName" :fill="color" />
+    <use :fill="color" :xlink:href="iconName" />
   </svg>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .sub-el-icon,
 .nav-icon {
   display: inline-block;

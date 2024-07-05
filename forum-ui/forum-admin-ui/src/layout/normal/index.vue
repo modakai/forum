@@ -1,22 +1,25 @@
 <script lang="ts" name="Layout" setup>
 import SideBar from '@/layout/normal/sidebar/index.vue'
 import Header from '@/layout/normal/header/index.vue'
-import { ref } from 'vue'
+import AppMain from '@/layout/components/AppMain.vue'
+import { useAppStore } from '@/store'
 
-// 控制是否展开
-const collapsed = ref(false)
+const appStore = useAppStore()
 </script>
 
 <template>
   <div class="layout">
-    <aside :class="collapsed ? 'w-64' : 'w-220'" class="aside">
+    <!--  菜单列表  -->
+    <aside :class="appStore.collapsed ? 'w-220' : 'w-64'" class="aside">
       <SideBar />
     </aside>
 
     <article class="article">
       <Header class="header" />
 
-      <div class="main-container"></div>
+      <div class="main-container">
+        <app-main />
+      </div>
     </article>
   </div>
 </template>
@@ -43,11 +46,13 @@ const collapsed = ref(false)
     flex-direction: column;
     flex: 1 1 0%;
     width: 0;
-    background-color: #666e87;
-  }
+    background-color: #18a058;
 
-  .header {
-    border-bottom: 1px solid var(--el-border-color);
+    .header {
+      padding-right: 12px;
+      padding-left: 12px;
+      border-bottom: 1px solid var(--el-border-color);
+    }
   }
 }
 </style>

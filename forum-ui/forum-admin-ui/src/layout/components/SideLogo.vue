@@ -1,14 +1,20 @@
 <script lang="ts" name="SideLogo" setup>
 import { Logo } from '@/components'
+import { useAppStore } from '@/store'
 
 const title = import.meta.env.VITE_APP_TITLE
+
+const appStore = useAppStore()
 </script>
 
 <template>
   <router-link class="h-60 f-c-c" to="/">
     <Logo />
     <!--    v-show="!appStore.collapsed"-->
-    <h2 class="ml-10 max-w-140 flex-shrink-0 text-16 color-primary font-bold">
+    <h2
+      v-show="appStore.collapsed"
+      class="ml-10 max-w-140 flex-shrink-0 text-16 color-primary font-bold"
+    >
       {{ title }}
     </h2>
   </router-link>
