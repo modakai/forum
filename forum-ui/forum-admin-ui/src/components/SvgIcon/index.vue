@@ -9,7 +9,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   className: '',
-  color: '#000'
+  color: ''
 })
 
 // icon的名字

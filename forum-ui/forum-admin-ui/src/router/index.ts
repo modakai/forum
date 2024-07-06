@@ -30,7 +30,7 @@ export const constantsRoutes = [
   {
     path: '/',
     component: () => import('@/layout/normal/index.vue'),
-    meta: { visible: false },
+    meta: { visible: true, alwaysShow: true },
     children: [
       {
         path: '/',
@@ -42,22 +42,22 @@ export const constantsRoutes = [
   {
     path: '/system',
     component: () => import('@/layout/normal/index.vue'),
-    meta: { title: '系统管理' },
+    meta: { title: '系统管理', icon: 'system', visible: true, alwaysShow: true },
     children: [
       {
         path: '/system/user',
         component: () => import('@/views/system/user/index.vue'),
-        meta: { title: '用户管理', icon: '', visible: true }
+        meta: { title: '用户管理', icon: 'user-manager', visible: true }
       },
       {
         path: '/system/role',
         component: () => import('@/views/system/role/index.vue'),
-        meta: { title: '角色管理', icon: '', visible: true }
+        meta: { title: '角色管理', icon: 'role', visible: true }
       },
       {
         path: '/system/menu',
         component: () => import('@/views/system/menu/index.vue'),
-        meta: { title: '菜单管理', icon: '', visible: true }
+        meta: { title: '菜单管理', icon: 'menu', visible: true }
       }
     ]
   }

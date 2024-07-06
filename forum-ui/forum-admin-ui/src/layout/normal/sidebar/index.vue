@@ -14,7 +14,12 @@ const appStore = useAppStore()
     <!--  菜单  -->
     <!--  菜单区域  -->
     <el-scrollbar class="menu_scrollbar" style="margin-top: 4px">
-      <el-menu :collapse="!appStore.collapsed" :default-active="$route.path" unique-opened>
+      <el-menu
+        :collapse="!appStore.collapsed"
+        :default-active="$route.path"
+        class="menu-items"
+        unique-opened
+      >
         <SideMenu :menu-list="constantsRoutes" />
       </el-menu>
     </el-scrollbar>
@@ -24,5 +29,10 @@ const appStore = useAppStore()
 <style lang="scss" scoped>
 .side-logo {
   border-bottom: 1px solid var(--el-border-color-light);
+}
+
+.menu_scrollbar {
+  width: 100%;
+  height: calc(100vh - 60px);
 }
 </style>

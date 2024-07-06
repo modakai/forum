@@ -89,3 +89,31 @@ body {
 .w-220 {
   width: 220px;
 }
+
+.menu-items:not(.el-menu--collapse) .el-menu-item {
+  &::before {
+    z-index: auto;
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 0;
+    bottom: 0;
+    content: '';
+    pointer-events: none;
+    border-radius: var(--el-border-radius-base);
+    transition: background-color 0.3s var(--el-transition-function-ease-in-out-bezier);
+  }
+
+  &.is-active::before {
+    background-color: rgb(var(--el-color-primary-rgb), 0.13);
+    border-left: 4px solid var(--el-menu-active-color);
+  }
+
+  &.is-active .icon-color {
+    fill: var(--el-menu-active-color);
+  }
+
+  &.is-active:hover {
+    background-color: transparent;
+  }
+}
