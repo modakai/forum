@@ -63,6 +63,48 @@ export const constantsRoutes = [
   }
 ]
 
+/*
+[
+    {
+      "name": "System",
+      "path": "/system",
+      "component": "Layout",
+      "meta": {
+        "title": "系统管理",
+        "icon": "system",
+        "visible": false,
+        "isExternalLink": false
+      },
+      "children": [
+        {
+          "name": "User",
+          "path": "user",
+          "component": "system/user/index",
+          "meta": {
+            "title": "用户管理",
+            "icon": "user",
+            "visible": false,
+            "isExternalLink": false
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Tool",
+      "path": "/tool",
+      "component": "Layout",
+      "meta": {
+        "title": "系统监控",
+        "icon": "tool",
+        "visible": false,
+        "isExternalLink": false
+      },
+      "children": []
+    }
+  ]
+ */
+
 const router = createRouter({
   history: createWebHistory(),
   routes: constantsRoutes

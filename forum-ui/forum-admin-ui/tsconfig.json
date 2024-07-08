@@ -47,7 +47,10 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "**/*.ts", // 包括所有 TypeScript 文件。
   ],
   "exclude": [
     "node_modules",

@@ -1,4 +1,5 @@
 @import "reset";
+
 //@import 'element/light.css';
 //@import "element/dark.css";
 
@@ -90,6 +91,22 @@ body {
   width: 220px;
 }
 
+.px-12 {
+  padding: 0 12px;
+}
+
+.w-0 {
+  width: 0;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.mx-6 {
+  margin: 0 6px;
+}
+
 .menu-items:not(.el-menu--collapse) .el-menu-item {
   &::before {
     z-index: auto;
@@ -117,3 +134,4 @@ body {
     background-color: transparent;
   }
 }
+

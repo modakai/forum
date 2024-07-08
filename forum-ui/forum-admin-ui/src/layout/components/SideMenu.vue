@@ -1,11 +1,18 @@
 <script lang="ts" setup>
 //获取父组件传递过来的全部路由数组
 import router from '@/router'
+import { useTabsStore } from '@/store'
+import type { RouteRecord } from 'vue-router'
+
+// 获取 tabpansStore
+const tabsStore = useTabsStore()
 
 const { menuList } = defineProps(['menuList'])
 
-const goRoute = (path: string) => {
-  router.push(path)
+const goRoute = (route: RouteRecord) => {
+  router.push(route.path)
+  // 插入数据到tabs中
+  tabsStore.addTab(route)
 }
 </script>
 
@@ -13,7 +20,7 @@ const goRoute = (path: string) => {
   <template v-for="item in menuList" :key="item.path">
     <!--没有子路由-->
     <template v-if="!item.children">
-      <el-menu-item v-if="item.meta.visible" :index="item.path" @click="goRoute(item.path)">
+      <el-menu-item v-if="item.meta.visible" :index="item.path" @click="goRoute(item)">
         <svg-icon :icon-class="item.meta.icon" />
         <template #title>
           <span class="ml-10">{{ item.meta.title }}</span>
@@ -25,7 +32,7 @@ const goRoute = (path: string) => {
       <el-menu-item
         v-if="item.children[0].meta.visible"
         :index="item.children[0].path"
-        @click="goRoute(item.children[0].path)"
+        @click="goRoute(item.children[0])"
       >
         <svg-icon :icon-class="item.children[0].meta.icon" />
         <template #title>

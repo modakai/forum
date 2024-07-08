@@ -1,0 +1,36 @@
+.el-tabs--card > .el-tabs__header {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.el-tabs--card > .el-tabs__header .el-tabs__item {
+  border-left: none;
+  //border-bottom: 1px solid var(--el-border-color);
+}
+
+.el-tabs--card > .el-tabs__header .el-tabs__nav {
+  border: none;
+}
+
+.el-tabs__new-tab {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.el-tabs__nav .el-tabs__item {
+  height: 36px;
+  margin: 0 6px;
+  border: 1px solid var(--el-color-primary) !important;
+  border-radius: 4px !important;
+
+  &.is-active {
+    background-color: rgba(var(--el-color-primary-rgb), 0.1) !important;
+    font-weight: 550;
+  }
+
+  &.is-disabled {
+    color: var(--el-color-primary);
+  }
+
+}
