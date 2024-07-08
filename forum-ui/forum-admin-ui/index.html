@@ -14,13 +14,6 @@
           padding: 0px;
       }
 
-      .chromeframe {
-          margin: 0.2em 0;
-          background: #ccc;
-          color: #000;
-          padding: 0.2em 0;
-      }
-
       #loader-wrapper {
           position: fixed;
           top: 0;
@@ -28,6 +21,7 @@
           width: 100%;
           height: 100%;
           z-index: 999999;
+          background-color: #316C72FF;
       }
 
       #loader {
@@ -49,131 +43,111 @@
           z-index: 1001;
       }
 
-      #loader:before {
-          content: "";
+      .loading,
+      .loading > div {
+          position: relative;
+          box-sizing: border-box;
+      }
+
+      .loading {
+          display: block;
+          font-size: 0;
+          color: #fff;
+      }
+
+      .loading.la-dark {
+          color: #333;
+      }
+
+      .loading > div {
+          display: inline-block;
+          float: none;
+          background-color: currentColor;
+          border: 0 solid currentColor;
+      }
+
+      .loading {
+          left: 50%;
+          top: 50%;
+          margin: -75px 0 0 -75px;
+          width: 100px;
+          height: 100px;
+      }
+
+      .loading > div:nth-child(1) {
           position: absolute;
-          top: 5px;
-          left: 5px;
-          right: 5px;
-          bottom: 5px;
-          border-radius: 50%;
-          border: 3px solid transparent;
-          border-top-color: #FFF;
-          -webkit-animation: spin 3s linear infinite;
-          -moz-animation: spin 3s linear infinite;
-          -o-animation: spin 3s linear infinite;
-          -ms-animation: spin 3s linear infinite;
-          animation: spin 3s linear infinite;
+          top: 50%;
+          left: 50%;
+          z-index: 1;
+          width: 60%;
+          height: 60%;
+          background: #aaa;
+          border-radius: 100%;
+          transform: translate(-50%, -50%);
+          animation: ball-atom-shrink 4.5s infinite linear;
       }
 
-      #loader:after {
-          content: "";
+      .loading > div:not(:nth-child(1)) {
           position: absolute;
-          top: 15px;
-          left: 15px;
-          right: 15px;
-          bottom: 15px;
-          border-radius: 50%;
-          border: 3px solid transparent;
-          border-top-color: #FFF;
-          -moz-animation: spin 1.5s linear infinite;
-          -o-animation: spin 1.5s linear infinite;
-          -ms-animation: spin 1.5s linear infinite;
-          -webkit-animation: spin 1.5s linear infinite;
-          animation: spin 1.5s linear infinite;
-      }
-
-
-      @-webkit-keyframes spin {
-          0% {
-              -webkit-transform: rotate(0deg);
-              -ms-transform: rotate(0deg);
-              transform: rotate(0deg);
-          }
-
-          100% {
-              -webkit-transform: rotate(360deg);
-              -ms-transform: rotate(360deg);
-              transform: rotate(360deg);
-          }
-      }
-
-      @keyframes spin {
-          0% {
-              -webkit-transform: rotate(0deg);
-              -ms-transform: rotate(0deg);
-              transform: rotate(0deg);
-          }
-
-          100% {
-              -webkit-transform: rotate(360deg);
-              -ms-transform: rotate(360deg);
-              transform: rotate(360deg);
-          }
-      }
-
-
-      #loader-wrapper .loader-section {
-          position: fixed;
-          top: 0;
-          width: 51%;
-          height: 100%;
-          background: #7171C6;
-          z-index: 1000;
-          -webkit-transform: translateX(0);
-          -ms-transform: translateX(0);
-          transform: translateX(0);
-      }
-
-      #loader-wrapper .loader-section.section-left {
           left: 0;
+          z-index: 0;
+          width: 100%;
+          height: 100%;
+          background: none;
+          animation: ball-atom-zindex 1.5s 0s infinite steps(2, end);
       }
 
-      #loader-wrapper .loader-section.section-right {
-          right: 0;
+      .loading > div:not(:nth-child(1)):before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 20px;
+          height: 20px;
+          margin-top: -5px;
+          margin-left: -5px;
+          content: "";
+          background: currentColor;
+          border-radius: 50%;
+          opacity: 0.75;
+          animation: ball-atom-position 1.5s 0s infinite ease,
+          ball-atom-size 1.5s 0s infinite ease;
       }
 
-
-      .loaded #loader-wrapper .loader-section.section-left {
-          -webkit-transform: translateX(-100%);
-          -ms-transform: translateX(-100%);
-          transform: translateX(-100%);
-          -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-          transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      .loading > div:nth-child(2) {
+          animation-delay: 0.75s;
       }
 
-      .loaded #loader-wrapper .loader-section.section-right {
-          -webkit-transform: translateX(100%);
-          -ms-transform: translateX(100%);
-          transform: translateX(100%);
-          -webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-          transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      .loading > div:nth-child(2):before {
+          animation-delay: 0s, -1.125s;
       }
 
-      .loaded #loader {
-          opacity: 0;
-          -webkit-transition: all 0.3s ease-out;
-          transition: all 0.3s ease-out;
+      .loading > div:nth-child(3) {
+          transform: rotate(120deg);
+          animation-delay: -0.25s;
       }
 
-      .loaded #loader-wrapper {
-          visibility: hidden;
-          -webkit-transform: translateY(-100%);
-          -ms-transform: translateY(-100%);
-          transform: translateY(-100%);
-          -webkit-transition: all 0.3s 1s ease-out;
-          transition: all 0.3s 1s ease-out;
+      .loading > div:nth-child(3):before {
+          animation-delay: -1s, -0.75s;
       }
 
-      .no-js #loader-wrapper {
-          display: none;
+      .loading > div:nth-child(4) {
+          transform: rotate(240deg);
+          animation-delay: 0.25s;
       }
 
-      .no-js h1 {
-          color: #222222;
+      .loading > div:nth-child(4):before {
+          animation-delay: -0.5s, -0.125s;
+      }
+
+      @keyframes ball-atom-position {
+          50% {
+              top: 100%;
+              left: 100%;
+          }
       }
 
       #loader-wrapper .load_title {
+
           font-family: 'Open Sans';
           color: #FFF;
           font-size: 19px;
@@ -184,24 +158,94 @@
           top: 60%;
           opacity: 1;
           line-height: 30px;
+          display: inline-block;
       }
 
       #loader-wrapper .load_title span {
-          font-weight: normal;
-          font-style: italic;
-          font-size: 13px;
-          color: #FFF;
-          opacity: 0.5;
+          top: 10px; /*字符上下浮动*/
+          position: relative;
+          animation: loading 1s ease 0s infinite alternate; /*引用动画*/
+          /* animation: 动画名称 动画时间 动画曲线 何时开始 播放次数 是否反方向;
+          alternate:表示动画先正常运行再反方向运行，并持续交替
+          infinite:表示无限循环*/
+          font-size: 19px;
+          color: white;
+      }
+
+      #loader-wrapper .load_title span:nth-child(2) {
+          animation-delay: 0.1s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(3) {
+          animation-delay: 0.2s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(4) {
+          animation-delay: 0.3s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(5) {
+          animation-delay: 0.4s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(6) {
+          animation-delay: 0.5s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(7) {
+          animation-delay: 0.6s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(8) {
+          animation-delay: 0.7s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(9) {
+          animation-delay: 0.8s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(10) {
+          animation-delay: 0.9s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(11) {
+          animation-delay: 1s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(12) {
+          animation-delay: 1.1s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(13) {
+          animation-delay: 1.2s;
+      }
+
+      #loader-wrapper .load_title span:nth-child(14) {
+          animation-delay: 1.3s;
+      }
+
+      @keyframes loading { /* 定义动画*/
+          100% {
+              top: -10px; /*字符上下浮动*/
+              /*上升的时候阴影要在文字下面一些，所以垂直阴影的位置坐标和模糊距离要大一些*/
+          }
       }
   </style>
 </head>
 <body>
 <div id="app">
   <div id="loader-wrapper">
-    <div id="loader"></div>
-    <div class="loader-section section-left"></div>
-    <div class="loader-section section-right"></div>
-    <div class="load_title">正在加载系统资源，请耐心等待</div>
+
+    <div class="loading">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="load_title">
+      <span
+        class="title_1">正</span><span>在</span><span>加</span><span>载</span><span>系</span><span>统</span><span>资</span><span>源</span><span>，</span><span>请</span><span>耐</span><span>心</span><span>等</span><span>待</span>
+    </div>
   </div>
 </div>
 <script src="/src/main.ts" type="module"></script>
