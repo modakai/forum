@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { RouteRecord } from 'vue-router'
 import type { TabStore } from '@/store/modules/types/types'
 import type { TabPaneName } from 'element-plus'
+import { nextTick } from 'vue'
 
 export const useTabsStore = defineStore('tabs', {
   state(): TabStore {
@@ -11,7 +12,13 @@ export const useTabsStore = defineStore('tabs', {
           label: '首页',
           path: '/'
         }
-      ]
+      ],
+      activeTab: ''
+    }
+  },
+  getters: {
+    activeIndex(): number {
+      return this.tabPans.findIndex((item) => item.path === this.activeTab)
     }
   },
   actions: {
@@ -35,6 +42,14 @@ export const useTabsStore = defineStore('tabs', {
      */
     remove(path: TabPaneName) {
       this.tabPans = this.tabPans.filter((item) => item.path !== path)
+    },
+    /**
+     * 设置基本Tab
+     * @param path
+     */
+    async setActiveTab(path: string) {
+      await nextTick() // tab栏dom更新完再设置激活，让tab栏定位到新增的tab上生效
+      this.activeTab = path
     }
   }
 })
