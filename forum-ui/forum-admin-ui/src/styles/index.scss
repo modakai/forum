@@ -107,6 +107,23 @@ body {
   margin: 0 6px;
 }
 
+.mr-16 {
+  margin-right: 16px;
+}
+
+.opacity-20 {
+  opacity: 0.2;
+}
+
+.flex {
+  display: flex;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+
 .menu-items:not(.el-menu--collapse) .el-menu-item {
   &::before {
     z-index: auto;
