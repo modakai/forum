@@ -137,3 +137,20 @@ export const getGreeting = () => {
     return '晚上好'
   }
 }
+
+/**
+ * 设置 本地缓存
+ * @param key
+ * @param value
+ */
+export const setLocalStorage = (key: string, value: string) => {
+  localStorage.setItem(key, value)
+}
+
+/**
+ * 获取 本地缓存
+ * @param key
+ */
+export const getLocalStorage = (key: string) => {
+  return localStorage.getItem(key)
+}

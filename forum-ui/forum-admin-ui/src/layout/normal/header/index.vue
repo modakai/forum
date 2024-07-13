@@ -3,6 +3,12 @@ import MenuCollapse from '@/layout/components/MenuCollapse.vue'
 import AppTab from '@/layout/components/AppTab.vue'
 import SvgIcon from '@/components/SvgIcon/index.vue'
 import UserAvatar from '@/layout/components/UserAvatar.vue'
+import { useAppStore } from '@/store'
+
+const appStore = useAppStore()
+const switchThemes = () => {
+  appStore.toggleDark()
+}
 </script>
 
 <template>
@@ -15,10 +21,18 @@ import UserAvatar from '@/layout/components/UserAvatar.vue'
 
     <div class="flex header-right px-12">
       <!--  主题切换图标：light dark    -->
-      <svg-icon class="mr-16 cursor-pointer" icon-class="sun" />
+      <svg-icon
+        :icon-class="appStore.isDark ? 'moon' : 'sun'"
+        class="mr-16 cursor-pointer"
+        @click="switchThemes"
+      />
 
       <!-- 全屏图标 -->
-      <svg-icon class="mr-16 cursor-pointer" icon-class="maximize" />
+      <svg-icon
+        :icon-class="appStore.isFull ? 'minimize' : 'maximize'"
+        class="mr-16 cursor-pointer"
+        @click="appStore.toggleFull"
+      />
 
       <!-- 头像 -->
       <user-avatar />
