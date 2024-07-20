@@ -1,7 +1,6 @@
 package com.sakura.forum.utils;
 
 import com.sakura.forum.core.LoginUser;
-import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.exception.ServiceException;
 import com.sakura.forum.security.StpKit;
 import jakarta.validation.constraints.NotNull;
@@ -27,18 +26,15 @@ public class LoginUserUtil {
     private static final String APP_USER_KEY = CACHE_PREFIX + "app:user:";
 
     private static final RedisUtil redisUtil = SpringContextUtil.getBean(RedisUtil.class);
+    
 
-
-    public static SysUser getLoginSysUser() {
-        // 这里从 SaToken中取，太久了。改成使用自己的缓存用户信息看看
-        // 如果这里拿到的是null 就会报错
-        return (SysUser) Optional.ofNullable(StpKit.ADMIN.getSession().get(SYS_USER_KEY))
-                .orElseThrow(() -> new ServiceException("用户信息为空"));
-    }
-
-    public static LoginUser getLoginUser() {
+    public static LoginUser getLoginSysUser() {
         // 先拿到id
-        return null;
+        var loginId = StpKit.ADMIN.getLoginId();
+        // 再拿数据
+        return (LoginUser) Optional
+                .ofNullable(redisUtil.getCacheObject(SYS_USER_KEY + loginId))
+                .orElseThrow(() -> new ServiceException("用户信息为空"));
     }
 
     /**

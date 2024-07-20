@@ -2,6 +2,7 @@ package com.sakura.forum.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sakura.forum.constant.CommonConstant;
+import com.sakura.forum.core.domain.dto.MenuQueryDto;
 import com.sakura.forum.core.domain.dto.MenuRoleDto;
 import com.sakura.forum.core.domain.dto.MenuSaveDto;
 import com.sakura.forum.core.domain.entity.SysMenu;
@@ -107,15 +108,39 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             }
         }
         // 判断是否重复
-        lambdaQuery()
+        SysMenu info = lambdaQuery()
                 .eq(SysMenu::getMenuName, menuSaveDto.getMenuName())
-                .oneOpt()
-                .orElseThrow(() -> new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "菜单名称重复"));
+                .one();
+        if (!Objects.isNull(info)) {
+            throw new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "菜单名称重复");
+        }
 
         // 2. 保存菜单
         // 类型转换
         SysMenu menu = BeanCopyMapper.INSTANCE.menuSaveDtoToSysMenu(menuSaveDto);
         menuMapper.insert(menu);
+    }
+
+    @Override
+    public List<SysMenu> treeList(MenuQueryDto query, Long userId) {
+        // 1. 判断是否为超级管理员
+        if (SysUser.isAdmin(userId)) {
+            // 超级管理员查询所有数据
+            List<SysMenu> menuList = lambdaQuery()
+                    .like(StringUtils.isNotBlank(query.getMenuName()), SysMenu::getMenuName, query.getMenuName())
+                    .eq(Objects.nonNull(query.getStatus()), SysMenu::getStatus, query.getStatus())
+                    .orderByAsc(List.of(
+                            SysMenu::getParentId,
+                            SysMenu::getSort
+                    ))
+                    .list();
+            // 转换成 tree
+            return getChildren(menuList, CommonConstant.MENU_PARENT_ID);
+//            return menuList;
+        } else {
+            // 非超级管理员 查询权限控制下的菜单
+            return List.of();
+        }
     }
 
     /**

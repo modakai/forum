@@ -1,5 +1,6 @@
 package com.sakura.forum.framework.web.service.syslogin.impl;
 
+import com.sakura.forum.core.LoginUser;
 import com.sakura.forum.core.domain.dto.SysUserLoginDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.enums.ResultCodeEnum;
@@ -9,9 +10,12 @@ import com.sakura.forum.framework.web.service.captcha.CaptchaService;
 import com.sakura.forum.framework.web.service.syslogin.PasswordService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import com.sakura.forum.security.StpKit;
+import com.sakura.forum.struct.BeanCopyMapper;
 import com.sakura.forum.system.mapper.SysUserMapper;
 import com.sakura.forum.utils.LoginUserUtil;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * username + password 登录
@@ -52,17 +56,25 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
             throw new ServiceException("用户已封禁，请联系管理员");
         }
 
+        // 缓存用户信息
+        // 转换对象
+        CompletableFuture.runAsync(() -> {
+            LoginUser loginUser = BeanCopyMapper.INSTANCE.sysUserToLoginUser(sysUser);
+            loginUser.setLoginType(LoginUserUtil.SYS_USER_TYPE);
+            LoginUserUtil.cacheLoginUser(loginUser);
+        });
+
         // 进行登入
         StpKit.ADMIN.login(sysUser.getId(), formData.getRememberMe());
 
-        // 缓存用户信息
-        LoginUserUtil.cacheLoginUser(sysUser, sysUser.getId());
-
         // 获取token
         String token = StpKit.ADMIN.getTokenValue();
-        // 删除验证码
-        captchaService.removeCaptcha(formData.getUsername());
 
+        // 删除验证码 可以使用异步进行删除
+        CompletableFuture.runAsync(() -> {
+            captchaService.removeCaptcha(formData.getUsername());
+        });
+        
         // 返回token
         return token;
     }

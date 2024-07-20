@@ -9,6 +9,7 @@ import com.sakura.forum.core.domain.vo.Router;
 import com.sakura.forum.framework.web.service.permission.SysPermissionService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import com.sakura.forum.security.StpKit;
+import com.sakura.forum.struct.BeanCopyMapper;
 import com.sakura.forum.utils.LoginUserUtil;
 import com.sakura.forum.web.vo.SysUserInfoVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +50,7 @@ public class SysLoginController {
     public SaResult getInfo() {
         SysUserInfoVo result = new SysUserInfoVo();
         // 获取用户信息
-        SysUser sysUser = LoginUserUtil.getLoginSysUser();
+        SysUser sysUser = BeanCopyMapper.INSTANCE.loginUserToSysUser(LoginUserUtil.getLoginSysUser());
         result.setUser(sysUser);
         // 获取角色
         Set<String> roleList = permissionService.getRolePermission(sysUser);

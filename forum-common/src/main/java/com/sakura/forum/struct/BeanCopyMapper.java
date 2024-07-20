@@ -27,4 +27,12 @@ public interface BeanCopyMapper {
      * @return 登入用户对象
      */
     LoginUser sysUserToLoginUser(SysUser user);
+
+    /**
+     * 登入用户对象转换成系统用户
+     *
+     * @param loginUser 登入用户
+     * @return 系统用户
+     */
+    SysUser loginUserToSysUser(LoginUser loginUser);
 }

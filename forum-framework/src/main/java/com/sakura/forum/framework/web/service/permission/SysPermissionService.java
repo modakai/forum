@@ -97,7 +97,7 @@ public class SysPermissionService {
      */
     public List<Router> getRouters() {
         // 1 获取当前登入的用户
-        Long userId = LoginUserUtil.getLoginSysUser().getId();
+        Long userId = LoginUserUtil.getLoginSysUserId();
         List<SysMenu> menuList = menuService.searchMenuTreeList(userId);
 
         // 转化成前端需要的路由组件
