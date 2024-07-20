@@ -106,6 +106,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
                 throw new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "权限标识符不能为空");
             }
         }
+        // 判断是否重复
+        lambdaQuery()
+                .eq(SysMenu::getMenuName, menuSaveDto.getMenuName())
+                .oneOpt()
+                .orElseThrow(() -> new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "菜单名称重复"));
 
         // 2. 保存菜单
         // 类型转换
