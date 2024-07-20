@@ -11,9 +11,11 @@ import com.sakura.forum.core.domain.vo.RouterMeta;
 import com.sakura.forum.enums.MenuTypeEnum;
 import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.exception.ServiceException;
+import com.sakura.forum.struct.BeanCopyMapper;
 import com.sakura.forum.system.mapper.SysMenuMapper;
 import com.sakura.forum.system.service.ISysMenuService;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +26,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
 
-    @Resource
-    private SysMenuMapper menuMapper;
+    private final SysMenuMapper menuMapper;
 
     @Override
     public List<MenuRoleDto> searchMenuPerms(SysUser user) {
@@ -80,8 +83,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 1. 校验参数
         // 1.1 根据不同的菜单类型校验参数
         Integer menuType = menuSaveDto.getMenuType();
-        // 0 1 2 必须参数  父级id 菜单名称、排序 菜单状态 使用 valid 框架
-        // 0 必须填写 菜单名称、排序、路由地址
+        // 0 1 2 必须参数  父级id 菜单名称 （唯一）、排序 菜单状态 使用 valid 框架
         // 1 必须填写 菜单名称、排序、路由地址、组件路径
         // 2 必须填写 菜单名称、排序、权限标识符
         if (Objects.equals(MenuTypeEnum.CATALOG.getValue(), menuType)) {
@@ -107,7 +109,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         // 2. 保存菜单
         // 类型转换
-
+        SysMenu menu = BeanCopyMapper.INSTANCE.menuSaveDtoToSysMenu(menuSaveDto);
+        menuMapper.insert(menu);
     }
 
     /**
