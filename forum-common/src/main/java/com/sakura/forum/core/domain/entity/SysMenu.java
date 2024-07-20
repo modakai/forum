@@ -1,6 +1,7 @@
 package com.sakura.forum.core.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.sakura.forum.core.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,8 +14,9 @@ import java.util.List;
  *
  * @TableName sys_menu
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("sys_menu")
 public class SysMenu extends BaseEntity implements Serializable {
 
     /**

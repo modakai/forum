@@ -1,23 +1,30 @@
 package com.sakura.forum.system.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sakura.forum.constant.CommonConstant;
 import com.sakura.forum.core.domain.dto.MenuRoleDto;
+import com.sakura.forum.core.domain.dto.MenuSaveDto;
 import com.sakura.forum.core.domain.entity.SysMenu;
 import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.core.domain.vo.Router;
 import com.sakura.forum.core.domain.vo.RouterMeta;
+import com.sakura.forum.enums.MenuTypeEnum;
+import com.sakura.forum.enums.ResultCodeEnum;
+import com.sakura.forum.exception.ServiceException;
 import com.sakura.forum.system.mapper.SysMenuMapper;
 import com.sakura.forum.system.service.ISysMenuService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
-public class SysMenuServiceImpl implements ISysMenuService {
+public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
 
     @Resource
     private SysMenuMapper menuMapper;
@@ -65,6 +72,42 @@ public class SysMenuServiceImpl implements ISysMenuService {
         }
 
         return routers;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void saveMenu(MenuSaveDto menuSaveDto) {
+        // 1. 校验参数
+        // 1.1 根据不同的菜单类型校验参数
+        Integer menuType = menuSaveDto.getMenuType();
+        // 0 1 2 必须参数  父级id 菜单名称、排序 菜单状态 使用 valid 框架
+        // 0 必须填写 菜单名称、排序、路由地址
+        // 1 必须填写 菜单名称、排序、路由地址、组件路径
+        // 2 必须填写 菜单名称、排序、权限标识符
+        if (Objects.equals(MenuTypeEnum.CATALOG.getValue(), menuType)) {
+            // 目录
+            if (StringUtils.isBlank(menuSaveDto.getPath())) {
+                throw new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "路由路径不能为空");
+            }
+            if (CommonConstant.MENU_PARENT_ID.equals(menuSaveDto.getParentId())) {
+                // 设置顶级父级 组件Layout
+                menuSaveDto.setComponent(CommonConstant.LAYOUT);
+            }
+        } else if (Objects.equals(MenuTypeEnum.NORMAL.getValue(), menuType)) {
+            // 菜单
+            if (StringUtils.isBlank(menuSaveDto.getPath()) || StringUtils.isBlank(menuSaveDto.getComponent())) {
+                throw new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "路由路径或组件路径不能为空");
+            }
+        } else if (Objects.equals(MenuTypeEnum.BUTTON.getValue(), menuType)) {
+            // 按钮
+            if (StringUtils.isBlank(menuSaveDto.getPerms())) {
+                throw new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "权限标识符不能为空");
+            }
+        }
+
+        // 2. 保存菜单
+        // 类型转换
+
     }
 
     /**

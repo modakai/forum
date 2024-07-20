@@ -73,6 +73,7 @@ mybatis-plus:
   type-aliases-package: com.sakura.**.entity
   # mapper 映射文件
   mapper-locations: classpath*:mapper/**/*Mapper.xml
+
 # springdoc-openapi项目配置
 springdoc:
   swagger-ui:
