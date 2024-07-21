@@ -103,4 +103,14 @@ public class SysPermissionService {
         // 转化成前端需要的路由组件
         return menuService.buildRouters(menuList);
     }
+
+    /**
+     * 删除 rolePerms 缓存
+     *
+     * @param roleKeyList roleKey的列表
+     */
+    public void removeCacheRolePerms(List<String> roleKeyList) {
+        // 使用redis 工具类缓存
+        redisUtil.deleteCacheMapValue(RedisCacheConstant.PERMISSION_KEY, roleKeyList);
+    }
 }

@@ -26,7 +26,7 @@ public class LoginUserUtil {
     private static final String APP_USER_KEY = CACHE_PREFIX + "app:user:";
 
     private static final RedisUtil redisUtil = SpringContextUtil.getBean(RedisUtil.class);
-    
+
 
     public static LoginUser getLoginSysUser() {
         // 先拿到id
@@ -43,7 +43,7 @@ public class LoginUserUtil {
      * @return 用户id
      */
     public static Long getLoginSysUserId() {
-        return (Long) StpKit.ADMIN.getLoginId();
+        return Long.parseLong((String) StpKit.ADMIN.getLoginId());
     }
 
     /**

@@ -231,6 +231,18 @@ public class RedisUtil {
     }
 
     /**
+     * 删除多个Hash中的字段
+     *
+     * @param key       Hash字段的键
+     * @param fieldList Hash中字段列表
+     * @return 是否成功
+     */
+    public boolean deleteCacheMapValue(final String key, final Collection<String> fieldList) {
+        // 通过fieldList 删除多个 hash中的字段
+        return redisTemplate.opsForHash().delete(key, fieldList.toArray()) > 0;
+    }
+
+    /**
      * 获得缓存的基本对象列表
      *
      * @param pattern 字符串前缀
@@ -239,4 +251,6 @@ public class RedisUtil {
     public Collection<String> keys(final String pattern) {
         return redisTemplate.keys(pattern);
     }
+
+
 }

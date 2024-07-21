@@ -15,6 +15,7 @@ import com.sakura.forum.exception.ServiceException;
 import com.sakura.forum.struct.BeanCopyMapper;
 import com.sakura.forum.system.mapper.SysMenuMapper;
 import com.sakura.forum.system.service.ISysMenuService;
+import com.sakura.forum.utils.LoginUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -139,8 +140,36 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 //            return menuList;
         } else {
             // 非超级管理员 查询权限控制下的菜单
-            return List.of();
+            List<SysMenu> menuList = menuMapper.selectMenuList(query, userId);
+            return getChildren(menuList, CommonConstant.MENU_PARENT_ID);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public List<String> removeMenu(Long id) {
+        Long userId = LoginUserUtil.getLoginSysUserId();
+        List<SysMenu> menuList = menuMapper.selectMenuListByMenuIdAndUserId(id, userId);
+        // 如何校验当前要删除的菜单id 是否属于当前用户所管理
+        if (menuList.isEmpty()) {
+            throw new ServiceException(ResultCodeEnum.DATA_ERROR.getCode(), "当前菜单不存在");
+        }
+
+        //  删除菜单
+        menuMapper.deleteBatch(menuList);
+
+        // 先获取对应的 菜单对应的角色关键字
+        List<String> roleKeyList = findMenuRelationRoleKeyList(menuList);
+
+        //  删除菜单与角色之间的关联数据
+        menuMapper.deleteBatchRelationRole(menuList);
+
+        return roleKeyList;
+    }
+
+    @Override
+    public List<String> findMenuRelationRoleKeyList(List<SysMenu> menuList) {
+        return menuMapper.selectMenuRelationRoleKeyList(menuList);
     }
 
     /**

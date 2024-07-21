@@ -51,6 +51,18 @@
                m.update_time
         FROM sys_menu m
     </sql>
+    <delete id="deleteBatch">
+        DELETE FROM sys_menu WHERE id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+    <delete id="deleteBatchRelationRole">
+        DELETE FROM sys_role_menu WHERE menu_id IN
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </delete>
 
     <!-- 返回角色菜单权限 -->
     <select id="selectMenuPerms" resultMap="MenuRoleDto">
@@ -85,5 +97,48 @@
             WHERE m.menu_type IN (0, 1) AND m.STATUS = 0
             ORDER by m.sort
         </if>
+    </select>
+    <select id="selectMenuList" resultType="com.sakura.forum.core.domain.entity.SysMenu">
+        <include refid="columAll"/>
+        LEFT JOIN sys_role_menu rm ON rm.menu_id = m.id
+        LEFT JOIN sys_user_role ur ON ur.role_id = rm.role_id
+        LEFT JOIN sys_role r ON r.id = rm.role_id
+        <where>
+            <if test="userId != null">
+                AND ur.user_id = #{userId}
+            </if>
+            <if test="query.menuName != null and query.menuName != ''">
+                AND m.menu_name LIKE concat('%', #{query.menuName}, '%')
+            </if>
+            <if test="query.status != null">
+                AND m.status = #{query.status}
+            </if>
+        </where>
+        ORDER BY m.parent_id, m.sort
+    </select>
+    <select id="selectMenuListByMenuIdAndUserId" resultType="com.sakura.forum.core.domain.entity.SysMenu">
+        <include refid="columAll"/>
+        LEFT JOIN sys_role_menu rm ON rm.menu_id = m.id
+        LEFT JOIN sys_user_role ur ON ur.role_id = rm.role_id
+        LEFT JOIN sys_role r ON r.id = rm.role_id
+        <where>
+            <if test="userId != null">
+                AND ur.user_id = #{userId}
+            </if>
+            <if test="menuId != null">
+                AND (m.id = #{menuId} or m.parent_id = #{menuId})
+            </if>
+        </where>
+    </select>
+    <select id="selectMenuRelationRoleKeyList" resultType="java.lang.String">
+        SELECT DISTINCT
+        role.role_key
+        FROM
+        sys_role role
+        JOIN ( SELECT role_id FROM sys_role_menu WHERE menu_id IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+        ) role_menu ON role.id = role_menu.role_id;
     </select>
 </mapper>
