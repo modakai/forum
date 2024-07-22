@@ -2,6 +2,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 
+export const Layout = () => import('@/views/Login.vue')
 /**
  * Note: 路由配置项
  *
@@ -21,15 +22,25 @@ import { createRouter, createWebHistory } from 'vue-router'
  */
 
 // 公共路由
-export const constantsRoutes = [
+const constantsRoutes = [
   {
     path: '/login',
     component: () => import('@/views/Login.vue'),
     meta: { title: '登入页', visible: false }
   },
   {
+    path: '/401',
+    component: () => import('@/views/error/401.vue'),
+    meta: { title: '404', visible: false }
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error/404.vue'),
+    meta: { title: '404', visible: false }
+  },
+  {
     path: '/',
-    component: () => import('@/layout/normal/index.vue'),
+    component: Layout,
     meta: { visible: true, alwaysShow: true },
     children: [
       {
@@ -41,7 +52,7 @@ export const constantsRoutes = [
   },
   {
     path: '/system',
-    component: () => import('@/layout/normal/index.vue'),
+    component: Layout,
     meta: { title: '系统管理', icon: 'system', visible: true, alwaysShow: true },
     children: [
       {
@@ -63,51 +74,18 @@ export const constantsRoutes = [
   }
 ]
 
-/*
-[
-    {
-      "name": "System",
-      "path": "/system",
-      "component": "Layout",
-      "meta": {
-        "title": "系统管理",
-        "icon": "system",
-        "visible": false,
-        "isExternalLink": false
-      },
-      "children": [
-        {
-          "name": "User",
-          "path": "user",
-          "component": "system/user/index",
-          "meta": {
-            "title": "用户管理",
-            "icon": "user",
-            "visible": false,
-            "isExternalLink": false
-          },
-          "children": []
-        }
-      ]
-    },
-    {
-      "name": "Tool",
-      "path": "/tool",
-      "component": "Layout",
-      "meta": {
-        "title": "系统监控",
-        "icon": "tool",
-        "visible": false,
-        "isExternalLink": false
-      },
-      "children": []
-    }
-  ]
- */
-
 const router = createRouter({
   history: createWebHistory(),
-  routes: constantsRoutes
+  routes: constantsRoutes,
+  // 刷新时，滚动条位置还原
+  //scrollBehavior: () => ({ left: 0, top: 0 }),
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  }
 })
 
 export default router
