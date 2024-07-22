@@ -15,6 +15,10 @@ export interface UserState {
   userInfo: UserInfo
   // token
   token: string
+  // 角色列表 限制为字符串数组
+  roles: string[]
+  // 权限列表
+  permissions: string[]
 }
 
 /**   tab的约束 **/

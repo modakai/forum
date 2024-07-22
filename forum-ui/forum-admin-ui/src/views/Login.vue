@@ -1,11 +1,12 @@
-<script setup lang="ts" name="Login">
+<script lang="ts" name="Login" setup>
 import { onMounted, reactive, ref } from 'vue'
 import { Key, Lock, User } from '@element-plus/icons-vue'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
 import { genNanoId, getGreeting } from '@/utils/util'
-import useUserStore from '@/store/modules/sysUser'
 import { getCaptcha } from '@/api/captcha'
+import { useUserStore } from '@/store'
+import router from '@/router'
 
 const title = import.meta.env.VITE_APP_TITLE
 
@@ -61,9 +62,10 @@ const smsFormRules = reactive<FormRules<SmsLoginForm>>({
 
 // 切换登入类型
 const activeTabName = ref<string>('normal')
-
+const loading = ref<boolean>(false)
 // 登入请求
 const submitLogin = async () => {
+  loading.value = true
   let ruleForm
   let formData
   // 根据不同的类型去校验不同的表单对象
@@ -75,7 +77,12 @@ const submitLogin = async () => {
     formData = smsForm
   }
   // 校验参数
-  await ruleForm.value?.validate()
+  try {
+    await ruleForm.value?.validate()
+  } catch (e) {
+    loading.value = false
+    return
+  }
 
   try {
     await userStore.login(formData)
@@ -84,7 +91,9 @@ const submitLogin = async () => {
       message: '登入成功',
       title: `HI,${getGreeting()}`
     })
+    router.push('/')
   } catch (e) {
+    loading.value = false
     ElNotification({
       type: 'error',
       message: (e as Error).message
@@ -129,39 +138,39 @@ onMounted(() => {
           <el-tab-pane label="密码登录" name="normal">
             <el-form
               ref="ruleNormalForm"
-              :rules="normalFormRules"
               :model="normalForm"
-              size="large"
+              :rules="normalFormRules"
               label-width="auto"
+              size="large"
               status-icon
               style="width: 100%"
             >
               <!--用户名-->
               <el-form-item prop="username">
-                <el-input :prefix-icon="User" v-model="normalForm.username" placeholder="用户名" />
+                <el-input v-model="normalForm.username" :prefix-icon="User" placeholder="用户名" />
               </el-form-item>
               <!--     密码     -->
               <el-form-item prop="password">
                 <el-input
-                  :prefix-icon="Lock"
-                  type="password"
                   v-model="normalForm.password"
+                  :prefix-icon="Lock"
                   placeholder="密码"
+                  type="password"
                 />
               </el-form-item>
               <el-form-item prop="captcha">
                 <el-input
-                  :prefix-icon="Key"
                   v-model="normalForm.captcha"
-                  style="flex: 1"
+                  :prefix-icon="Key"
                   maxlength="4"
                   placeholder="验证码"
+                  style="flex: 1"
                 />
 
                 <img
                   :src="captchaUrl"
-                  class="captcha"
                   alt="看不起？切换验证码"
+                  class="captcha"
                   @click="refreshCaptcha(normalForm.key, normalForm.loginType)"
                 />
               </el-form-item>
@@ -170,30 +179,36 @@ onMounted(() => {
                 <el-checkbox v-model="normalForm.rememberMe">记住我</el-checkbox>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" style="width: 100%" @click="submitLogin">登录</el-button>
+                <el-button
+                  :loading="loading"
+                  style="width: 100%"
+                  type="primary"
+                  @click="submitLogin"
+                  >登录
+                </el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="手机号登录" name="sms" disabled>
+          <el-tab-pane disabled label="手机号登录" name="sms">
             <el-form
               ref="ruleSmsForm"
-              :rules="smsFormRules"
               :model="smsForm"
-              size="large"
+              :rules="smsFormRules"
               label-width="auto"
+              size="large"
             >
               <el-form-item prop="username">
-                <el-input :prefix-icon="User" v-model="smsForm.username" placeholder="手机号" />
+                <el-input v-model="smsForm.username" :prefix-icon="User" placeholder="手机号" />
               </el-form-item>
               <el-form-item prop="captcha">
                 <el-input
-                  :prefix-icon="Key"
                   v-model="smsForm.captcha"
+                  :prefix-icon="Key"
                   maxlength="6"
                   placeholder="验证码"
                 >
                   <template #suffix>
-                    <el-button type="primary" link>获取验证码</el-button>
+                    <el-button link type="primary">获取验证码</el-button>
                   </template>
                 </el-input>
               </el-form-item>
@@ -202,7 +217,7 @@ onMounted(() => {
                 <el-checkbox v-model="smsForm.rememberMe">记住我</el-checkbox>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" style="width: 100%">登录</el-button>
+                <el-button style="width: 100%" type="primary">登录</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -215,7 +230,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .login {
   display: flex;
   flex-direction: column;

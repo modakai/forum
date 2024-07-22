@@ -1,21 +1,25 @@
 import { defineStore } from 'pinia'
-import type { UserState } from '@/store/modules/types/types'
+import type { UserInfo, UserState } from '@/store/modules/types/types'
 import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
 import { setLocalToken, setSessionToken } from '@/utils/tokenUtil'
-import { login } from '@/api/user'
+import { getUserInfo, login } from '@/api/user'
 
 /**
  * 用户状态仓库
  */
-const useUserStore = defineStore('forum-sys-user', {
+export const useUserStore = defineStore('forum-sys-user', {
   state(): UserState {
     return {
       // 记住我标识
       rememberMe: false,
       // 用户信息
-      userInfo: {},
+      userInfo: {} as UserInfo,
       // token
-      token: ''
+      token: '',
+      // 角色列表
+      roles: [],
+      // 权限列表
+      permissions: []
     }
   },
   actions: {
@@ -39,8 +43,30 @@ const useUserStore = defineStore('forum-sys-user', {
       } else {
         return Promise.reject(new Error(response.msg))
       }
+    },
+    /**
+     * 获取用户信息
+     */
+    getInfo() {
+      // 发送获取用户信息请求
+      return getUserInfo()
+        .then((response) => {
+          console.log('==============')
+          console.log(response)
+          if (response.code === 200) {
+            this.userInfo = response.data.user
+            if (response.data.roles && response.data.roles.length > 0) {
+              this.roles = response.data.roles
+              this.permissions = response.data.permissions
+            } else {
+              this.roles = ['ROLE_DEFAULT']
+            }
+          }
+          return Promise.resolve(response)
+        })
+        .catch((error) => {
+          return Promise.reject(error)
+        })
     }
   }
 })
-
-export default useUserStore

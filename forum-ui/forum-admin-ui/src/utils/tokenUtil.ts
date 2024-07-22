@@ -44,3 +44,10 @@ export const setSessionToken = (token: string) => {
 export const removeSessionToken = () => {
   sessionStorage.removeItem(ADMIN_TOKEN)
 }
+
+/**
+ * 获取token 如果有本地存储的token则返回本地存储的token，否则返回sessionStorage的token
+ */
+export const getToken = () => {
+  return getLocalToken() || getSessionToken()
+}

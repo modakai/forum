@@ -21,7 +21,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
     public void setSaTokenConfig() {
         // 设定 StpUtil 使用的 SaTokenConfig 配置参数对象
         SaTokenConfig config1 = new SaTokenConfig();
-        config1.setTokenName("ADMIN");
+        config1.setTokenName("Authorization-ADMIN");
         config1.setTokenPrefix("Bearer");
         config1.setActiveTimeout(-1);
         config1.setIsConcurrent(true);

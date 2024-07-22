@@ -44,6 +44,9 @@ export const useAppStore = defineStore('app', {
       } else {
         document.documentElement.classList.remove('dark')
       }
+    },
+    setTitle(title: string) {
+      document.title = title
     }
   }
 })

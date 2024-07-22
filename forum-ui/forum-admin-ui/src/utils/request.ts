@@ -1,6 +1,10 @@
 // 创建axios实例
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { getToken } from '@/utils/tokenUtil'
+
+// 是否显示重新登入
+export const isRelogin = { show: false }
 
 export const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
@@ -11,6 +15,10 @@ export const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   (config) => {
+    // 配置请求头token
+    if (getToken()) {
+      config.headers['Authorization-ADMIN'] = 'Bearer ' + getToken()
+    }
     return config
   },
   (error) => {

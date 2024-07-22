@@ -1,6 +1,7 @@
 // 用户请求参数
 
 import type { ResponseData } from '@/api/types'
+import type { UserInfo } from '@/store/modules/types/types'
 
 /**
  * 密码登入的请求参数接口
@@ -28,4 +29,13 @@ export interface SmsLoginForm {
 //定义登录接口返回数据类型
 export interface LoginResponseData extends ResponseData {
   data: string
+}
+
+// 定义获取用户信息返回得数据类型
+export interface UserInfoResponseData extends ResponseData {
+  data: {
+    user: UserInfo
+    roles: string[]
+    permissions: string[]
+  }
 }

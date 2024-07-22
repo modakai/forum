@@ -1,10 +1,18 @@
 <script lang="ts" name="Sidebar" setup>
 import SideLogo from '@/layout/components/SideLogo.vue'
 import SideMenu from '@/layout/components/SideMenu.vue'
-import { constantsRoutes } from '@/router'
-import { useAppStore } from '@/store'
+import { useAppStore, usePermissionStore } from '@/store'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 // 获取路由菜单
 const appStore = useAppStore()
+// 路由
+const route = useRoute()
+// 菜单路由
+const permissionStore = usePermissionStore()
+
+const sidebarRouters = computed(() => permissionStore.sidebarRouters)
+console.log('菜单列表', sidebarRouters.value)
 </script>
 
 <template>
@@ -20,7 +28,7 @@ const appStore = useAppStore()
         class="menu-items"
         unique-opened
       >
-        <SideMenu :menu-list="constantsRoutes" />
+        <SideMenu :menu-list="sidebarRouters" />
       </el-menu>
     </el-scrollbar>
   </div>

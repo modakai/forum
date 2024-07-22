@@ -1,14 +1,17 @@
 // 登入接口
-import type { LoginResponseData, NormalLoginForm, SmsLoginForm } from '@/api/user/type'
+import type {
+  LoginResponseData,
+  NormalLoginForm,
+  SmsLoginForm,
+  UserInfoResponseData
+} from '@/api/user/type'
 import request from '@/utils/request'
 
 //项目用户相关的请求地址
 enum API {
   LOGIN_URL = '/system/login',
-  // LOGIN_URL = '/api/user/login',
 
-  USERINFO_URL = '/admin/acl/index/info',
-  // USERINFO_URL = '/api/user/info',
+  USERINFO_URL = '/system/getInfo',
 
   LOGOUT_URL = '/admin/acl/index/logout'
 }
@@ -20,4 +23,11 @@ enum API {
  */
 export const login = (formData: NormalLoginForm | SmsLoginForm) => {
   return request.post<any, LoginResponseData>(API.LOGIN_URL, formData)
+}
+
+/**
+ * 获取用户信息
+ */
+export const getUserInfo = () => {
+  return request.get<any, UserInfoResponseData>(API.USERINFO_URL)
 }

@@ -29,6 +29,7 @@
     "skipLibCheck": true,
     // 不对第三方依赖类型检查 ，element-plus 生产打包报错
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     // 默认导入
     "suppressImplicitAnyIndexErrors": true,
     //加入这段代码解决main.ts报错问题

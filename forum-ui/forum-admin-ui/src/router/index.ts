@@ -2,7 +2,7 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
 
-export const Layout = () => import('@/views/Login.vue')
+export const Layout = () => import('@/layout/normal/index.vue')
 /**
  * Note: 路由配置项
  *
@@ -22,7 +22,7 @@ export const Layout = () => import('@/views/Login.vue')
  */
 
 // 公共路由
-const constantsRoutes = [
+export const constantsRoutes = [
   {
     path: '/login',
     component: () => import('@/views/Login.vue'),
@@ -42,37 +42,18 @@ const constantsRoutes = [
     path: '/',
     component: Layout,
     meta: { visible: true, alwaysShow: true },
+    redirect: '/home',
     children: [
       {
-        path: '/',
+        path: '/home',
         component: () => import('@/views/home/index.vue'),
         meta: { title: '首页', visible: true, icon: 'dashboard' }
       }
     ]
-  },
-  {
-    path: '/system',
-    component: Layout,
-    meta: { title: '系统管理', icon: 'system', visible: true, alwaysShow: true },
-    children: [
-      {
-        path: '/system/user',
-        component: () => import('@/views/system/user/index.vue'),
-        meta: { title: '用户管理', icon: 'user-manager', visible: true }
-      },
-      {
-        path: '/system/role',
-        component: () => import('@/views/system/role/index.vue'),
-        meta: { title: '角色管理', icon: 'role', visible: true }
-      },
-      {
-        path: '/system/menu',
-        component: () => import('@/views/system/menu/index.vue'),
-        meta: { title: '菜单管理', icon: 'menu', visible: true }
-      }
-    ]
   }
 ]
+
+export const dynamicRoutes = []
 
 const router = createRouter({
   history: createWebHistory(),
