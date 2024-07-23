@@ -44,13 +44,16 @@ public class SysPermissionService {
             // 上帝角色
             rolePerms.add(ADMIN_PERMISSION);
         } else {
-            // 去查询用户的角色
-            // TODO 先尝试从缓存获取
-            List<String> roleList = roleService.searchRolePerms(user);
 
-            // 缓存角色列表 set 集合存储
-            redisUtil.setCacheList(RedisCacheConstant.ROLE_KEY + user.getId(), roleList);
+            List<String> roleList = redisUtil.getCacheList(RedisCacheConstant.ROLE_KEY + user.getId());
+            // 判断是否为空
+            if (roleList == null || roleList.isEmpty()) {
+                // 去查询用户的角色
+                roleList = roleService.searchRolePerms(user);
 
+                // 缓存角色列表 set 集合存储
+                redisUtil.setCacheList(RedisCacheConstant.ROLE_KEY + user.getId(), roleList);
+            }
             rolePerms.addAll(roleList);
         }
 
@@ -64,30 +67,42 @@ public class SysPermissionService {
      * @return 菜单权限
      */
     public List<String> getMenuPermission(SysUser user) {
-        List<MenuRoleDto> menuRoleList = new ArrayList<>(8);
+        Map<String, Set<String>> rolePerms;
+
         // 判断是否为 超级管理员
         if (user.isAdmin()) {
             // 上帝权限
-            MenuRoleDto menuRoleDto = new MenuRoleDto();
-            menuRoleDto.setMenuPerms(ADMIN_PERMISSION);
-            menuRoleDto.setRoleKey(ADMIN_PERMISSION);
-
-            menuRoleList.add(menuRoleDto);
+            rolePerms = Collections.singletonMap(ADMIN_PERMISSION, Collections.singleton(ADMIN_PERMISSION));
         } else {
-            // 去查询用户的菜单
-            menuRoleList.addAll(menuService.searchMenuPerms(user));
-            // 根据 roleKey进行权限分组
-            Map<String, Set<String>> rolePerms = menuRoleList.stream().collect(
-                    // 根据 roleKey进行权限分组
-                    Collectors.groupingBy(MenuRoleDto::getRoleKey,
-                            // 获取菜单权限
-                            Collectors.mapping(MenuRoleDto::getMenuPerms, Collectors.toSet())));
-            // 缓存
-            redisUtil.setCacheMap(RedisCacheConstant.PERMISSION_KEY, rolePerms);
+            // 尝试从缓存中获取权限分组
+            rolePerms = redisUtil.getCacheMap(RedisCacheConstant.PERMISSION_KEY);
+
+            if (rolePerms == null) {
+                // 如果缓存中没有数据，去查询用户的菜单并更新缓存
+                List<MenuRoleDto> menuRoleList = menuService.searchMenuPerms(user);
+                // 如果没有对应的数据，直接返回空列表
+                if (menuRoleList == null || menuRoleList.isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                rolePerms = menuRoleList.stream().collect(
+                        Collectors.groupingBy(
+                                MenuRoleDto::getRoleKey,
+                                Collectors.mapping(
+                                        MenuRoleDto::getMenuPerms,
+                                        Collectors.toSet()
+                                )
+                        )
+                );
+
+                redisUtil.setCacheMap(RedisCacheConstant.PERMISSION_KEY, rolePerms);
+            }
         }
 
-
-        return menuRoleList.stream().map(MenuRoleDto::getMenuPerms).toList();
+        // 返回扁平化的权限列表
+        return rolePerms.values().stream()
+                .flatMap(Set::stream)
+                .collect(Collectors.toList());
     }
 
     /**
