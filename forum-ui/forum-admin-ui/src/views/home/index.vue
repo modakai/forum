@@ -1,11 +1,9 @@
-<script lang="ts" setup>
-import AppPage from '@/components/common/AppPage.vue'
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <AppPage show-footer>
+  <div>
     <el-button type="primary">按钮</el-button>
-  </AppPage>
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

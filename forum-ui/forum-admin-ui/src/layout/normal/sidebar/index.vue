@@ -1,18 +1,15 @@
 <script lang="ts" name="Sidebar" setup>
 import SideLogo from '@/layout/components/SideLogo.vue'
 import { useAppStore, usePermissionStore } from '@/store'
-import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import SideMenuItem from '@/layout/components/SideMenuItem.vue'
 // 获取路由菜单
 const appStore = useAppStore()
-// 路由
-const route = useRoute()
+
 // 菜单路由
 const permissionStore = usePermissionStore()
 
 const sidebarRouters = computed(() => permissionStore.sidebarRouters)
-console.log('菜单列表', sidebarRouters.value)
 </script>
 
 <template>
@@ -24,12 +21,12 @@ console.log('菜单列表', sidebarRouters.value)
     <el-scrollbar class="menu_scrollbar" style="margin-top: 4px">
       <el-menu
         :collapse="!appStore.collapsed"
+        :collapse-transition="false"
         :default-active="$route.path"
         class="menu-items"
+        style="height: 100%"
         unique-opened
       >
-        <!--   重构     -->
-        <!--        <SideMenu :menu-list="sidebarRouters" />-->
         <side-menu-item
           v-for="(route, index) in sidebarRouters"
           :key="route.path + index"
@@ -49,5 +46,13 @@ console.log('菜单列表', sidebarRouters.value)
 .menu_scrollbar {
   width: 100%;
   height: calc(100vh - 60px);
+}
+
+.el-menu {
+  border-right: none;
+}
+
+.sidebar {
+  border-right: 1px solid var(--el-menu-border-color);
 }
 </style>

@@ -6,6 +6,7 @@ import com.sakura.forum.security.StpKit;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 获取登入用户工具类
@@ -61,19 +62,20 @@ public class LoginUserUtil {
             throw new ServiceException("用户类型不能为空");
 
         String key;
+        long timeout;
         // 直接缓存
         if (SYS_USER_TYPE.equals(loginType)) {
             // 使用redis缓存
             key = SYS_USER_KEY + user.getId();
-
+            timeout = StpKit.ADMIN.getConfig().getTimeout();
         } else if (APP_USER_TYPE.equals(loginType)) {
             key = APP_USER_KEY + user.getId();
-
+            timeout = StpKit.USER.getConfig().getTimeout();
         } else {
             throw new ServiceException("用户类型错误");
         }
 
         // 缓存数据
-        redisUtil.setCacheObject(key, user);
+        redisUtil.setCacheObject(key, user, (int) timeout, TimeUnit.MINUTES);
     }
 }

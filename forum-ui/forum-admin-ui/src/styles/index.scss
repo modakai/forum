@@ -16,6 +16,14 @@ body {
   height: 100%;
 }
 
+.main-dark-bg-color {
+  background-color: #1E1E1E;
+}
+
+.main-light-bg-color {
+  background-color: #F5F6FB;
+}
+
 /* transition fade-slide */
 .fade-slide-leave-active,
 .fade-slide-enter-active {
@@ -103,6 +111,19 @@ body {
   flex: 1 1 0%;
 }
 
+.h-full {
+  height: 100%;
+}
+
+.cus-scroll {
+  overflow: auto;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .mx-6 {
   margin: 0 6px;
 }
@@ -150,5 +171,6 @@ body {
     background-color: transparent;
   }
 }
+
 
 

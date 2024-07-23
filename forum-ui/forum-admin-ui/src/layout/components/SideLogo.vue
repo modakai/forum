@@ -8,7 +8,7 @@ const appStore = useAppStore()
 </script>
 
 <template>
-  <router-link class="h-60 f-c-c" to="/">
+  <router-link class="h-60 f-c-c" style="flex: none" to="/">
     <Logo />
     <!--    v-show="!appStore.collapsed"-->
     <h2

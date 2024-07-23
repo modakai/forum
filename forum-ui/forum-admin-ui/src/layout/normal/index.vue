@@ -10,14 +10,15 @@ const appStore = useAppStore()
 <template>
   <div class="layout">
     <!--  菜单列表  -->
-    <aside :class="appStore.collapsed ? 'w-220' : 'w-64'" class="aside">
-      <SideBar />
-    </aside>
+    <SideBar :class="appStore.collapsed ? 'w-220' : 'w-64'" class="aside" />
 
     <article class="article">
       <Header class="header" />
 
-      <div class="main-container">
+      <div
+        :class="appStore.isDark ? 'main-dark-bg-color' : 'main-light-bg-color'"
+        class="main-container cus-scroll h-full flex-col flex-1"
+      >
         <app-main />
       </div>
     </article>
@@ -33,7 +34,6 @@ const appStore = useAppStore()
   .aside {
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--el-border-color);
 
     // 动画
     transition-property: width;
@@ -46,12 +46,15 @@ const appStore = useAppStore()
     flex-direction: column;
     flex: 1 1 0%;
     width: 0;
-    background-color: #18a058;
 
     .header {
       padding-right: 12px;
       padding-left: 12px;
       border-bottom: 1px solid var(--el-border-color);
+    }
+
+    .main-container {
+      justify-content: space-between;
     }
   }
 }
