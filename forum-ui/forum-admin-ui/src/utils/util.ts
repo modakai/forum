@@ -163,3 +163,11 @@ export const getLocalStorage = (key: string) => {
 export function isHttp(url: string | string[]): boolean {
   return url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1
 }
+
+/**
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export const isExternal = (path: string): boolean => {
+  return /^(https?:|mailto:|tel:)/.test(path)
+}

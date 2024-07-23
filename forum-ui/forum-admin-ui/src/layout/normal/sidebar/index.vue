@@ -1,9 +1,9 @@
 <script lang="ts" name="Sidebar" setup>
 import SideLogo from '@/layout/components/SideLogo.vue'
-import SideMenu from '@/layout/components/SideMenu.vue'
 import { useAppStore, usePermissionStore } from '@/store'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
+import SideMenuItem from '@/layout/components/SideMenuItem.vue'
 // 获取路由菜单
 const appStore = useAppStore()
 // 路由
@@ -28,7 +28,14 @@ console.log('菜单列表', sidebarRouters.value)
         class="menu-items"
         unique-opened
       >
-        <SideMenu :menu-list="sidebarRouters" />
+        <!--   重构     -->
+        <!--        <SideMenu :menu-list="sidebarRouters" />-->
+        <side-menu-item
+          v-for="(route, index) in sidebarRouters"
+          :key="route.path + index"
+          :base-path="route.path"
+          :item="route"
+        />
       </el-menu>
     </el-scrollbar>
   </div>

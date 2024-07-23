@@ -39,9 +39,9 @@ export const constantsRoutes = [
     meta: { title: '404', visible: false }
   },
   {
-    path: '/',
+    path: '',
     component: Layout,
-    meta: { visible: true, alwaysShow: true },
+    meta: { visible: true },
     redirect: '/home',
     children: [
       {
