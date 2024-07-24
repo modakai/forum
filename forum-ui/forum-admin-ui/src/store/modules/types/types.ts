@@ -24,7 +24,6 @@ export interface UserState {
 /**   tab的约束 **/
 export interface TabStore {
   tabPans: TabPanes
-  activeTab: string
 }
 
 export interface TabPane {

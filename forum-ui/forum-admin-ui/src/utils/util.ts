@@ -156,6 +156,24 @@ export const getLocalStorage = (key: string) => {
 }
 
 /**
+ * 设置 本地缓存
+ * @param key
+ * @param value
+ */
+export const setSessionStorage = (key: string, value: any) => {
+  sessionStorage.setItem(key, JSON.stringify(value))
+}
+
+/**
+ * 获取 本地缓存
+ * @param key
+ */
+export const getSessionStorage = (key: string) => {
+  let item = sessionStorage.getItem(key)
+  return item ? JSON.parse(item) : null
+}
+
+/**
  * 判断url是否是http或https
  * @param {string} path
  * @returns {Boolean}

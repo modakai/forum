@@ -68,6 +68,7 @@ const resolvePath = (routePath: string) => {
 }
 const tabsStore = useTabsStore()
 const goRoute = (route: RouteRecord) => {
+  route.path = resolvePath(onlyOneChild.value.path)
   tabsStore.addTab(route)
 }
 </script>
@@ -82,7 +83,7 @@ const goRoute = (route: RouteRecord) => {
       "
     >
       <app-link v-if="onlyOneChild.meta" :route="onlyOneChild" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" @click="goRoute(onlyOneChild)">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" @click="goRoute(item as RouteRecord)">
           <svg-icon :icon-class="onlyOneChild.meta.icon" />
           <template #title>
             <span class="ml-10">{{ onlyOneChild.meta.title }}</span>

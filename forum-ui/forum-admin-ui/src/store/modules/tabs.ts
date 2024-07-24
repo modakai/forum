@@ -2,23 +2,20 @@ import { defineStore } from 'pinia'
 import type { RouteRecord } from 'vue-router'
 import type { TabStore } from '@/store/modules/types/types'
 import type { TabPaneName } from 'element-plus'
-import { nextTick } from 'vue'
+import { getSessionStorage, setSessionStorage } from '@/utils/util'
+
+const TAB_PANS_KEY = 'forum-pans'
+const INIT_TAB_PANS = [
+  {
+    label: '首页',
+    path: '/home'
+  }
+]
 
 export const useTabsStore = defineStore('tabs', {
   state(): TabStore {
     return {
-      tabPans: [
-        {
-          label: '首页',
-          path: '/'
-        }
-      ],
-      activeTab: ''
-    }
-  },
-  getters: {
-    activeIndex(): number {
-      return this.tabPans.findIndex((item) => item.path === this.activeTab)
+      tabPans: getSessionStorage(TAB_PANS_KEY) || INIT_TAB_PANS
     }
   },
   actions: {
@@ -35,6 +32,8 @@ export const useTabsStore = defineStore('tabs', {
         label: route.meta.title as string,
         path: route.path
       })
+      // 会话缓存
+      setSessionStorage(TAB_PANS_KEY, this.tabPans)
     },
     /**
      * 删除已经存在 tab中的路由
@@ -44,12 +43,16 @@ export const useTabsStore = defineStore('tabs', {
       this.tabPans = this.tabPans.filter((item) => item.path !== path)
     },
     /**
-     * 设置基本Tab
-     * @param path
+     * 初始化头部 tab-pans列表
      */
-    async setActiveTab(path: string) {
-      await nextTick() // tab栏dom更新完再设置激活，让tab栏定位到新增的tab上生效
-      this.activeTab = path
+    initTabPans() {
+      let cacheTabPans = getSessionStorage(TAB_PANS_KEY)
+      // 如果cacheTabPans不为空 则赋值给 tabPans
+      if (cacheTabPans) {
+        this.tabPans = cacheTabPans
+      } else {
+        this.tabPans = INIT_TAB_PANS
+      }
     }
   }
 })

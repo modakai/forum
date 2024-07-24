@@ -51,8 +51,6 @@ export const useUserStore = defineStore('forum-sys-user', {
       // 发送获取用户信息请求
       return getUserInfo()
         .then((response) => {
-          console.log('==============')
-          console.log(response)
           if (response.code === 200) {
             this.userInfo = response.data.user
             if (response.data.roles && response.data.roles.length > 0) {

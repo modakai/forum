@@ -21,7 +21,6 @@ const tabsRemove = (name: TabPaneName) => {
  * @param pane
  */
 const goRoute = (pane: TabsPaneContext) => {
-  tabsStore.setActiveTab(pane.props.name as string)
   router.push(pane.props.name as string)
 }
 
