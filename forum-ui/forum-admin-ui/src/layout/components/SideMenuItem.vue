@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import AppLink from '@/layout/components/Link.vue'
 import type { RouteRecord } from 'vue-router'
-import { useTabsStore } from '@/store'
 import { ref } from 'vue'
 import { getNormalPath, isExternal } from '@/utils/util'
-
-const tabsStore = useTabsStore()
+import { useTabsStore } from '@/store'
 
 const props = defineProps({
   item: {
@@ -46,7 +44,6 @@ const hasOneShowingChild = (children = [] as RouteRecord[], parent: any) => {
   // Show parent if there are no child router to display
   if (showingChildren.length === 0) {
     onlyOneChild.value = { ...parent, path: '', noShowingChildren: true }
-    console.log(!(!onlyOneChild.value.children || onlyOneChild.value.noShowingChildren))
     return true
   }
 
@@ -69,6 +66,10 @@ const resolvePath = (routePath: string) => {
   // }
   return getNormalPath(props.basePath + '/' + routePath)
 }
+const tabsStore = useTabsStore()
+const goRoute = (route: RouteRecord) => {
+  tabsStore.addTab(route)
+}
 </script>
 
 <template>
@@ -80,8 +81,8 @@ const resolvePath = (routePath: string) => {
         (!onlyOneChild.children || onlyOneChild.noShowingChildren)
       "
     >
-      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)">
+      <app-link v-if="onlyOneChild.meta" :route="onlyOneChild" :to="resolvePath(onlyOneChild.path)">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" @click="goRoute(onlyOneChild)">
           <svg-icon :icon-class="onlyOneChild.meta.icon" />
           <template #title>
             <span class="ml-10">{{ onlyOneChild.meta.title }}</span>

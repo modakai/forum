@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/store'
+import router from '@/router'
 
 const errorHandler = () => true
 const DEFAULT_AVATAR = '@/src/assets/images/img.png'
@@ -7,12 +8,22 @@ const dropdownList = [
   {
     label: '个人中心',
     icon: 'user',
-    path: '/user/center'
+    path: '/profile',
+    click() {
+      // 跳转个人中心页
+      router.push(this.path)
+      // 发生获取profile请求
+    }
   },
   {
     label: '退出登录',
     icon: 'logout',
-    path: '/login'
+    path: '/login',
+    click() {
+      // 发送退出登入请求
+      // 清除用户信息
+      // 跳转登入页
+    }
   }
 ]
 
@@ -32,7 +43,7 @@ const userInfo = userStore.userInfo
     </div>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item v-for="(item, index) in dropdownList" :key="index">
+        <el-dropdown-item v-for="(item, index) in dropdownList" :key="index" @click="item.click()">
           {{ item.label }}
         </el-dropdown-item>
       </el-dropdown-menu>

@@ -50,6 +50,18 @@ export const constantsRoutes = [
         meta: { title: '首页', visible: true, icon: 'dashboard' }
       }
     ]
+  },
+  {
+    path: '/profile',
+    component: Layout,
+    meta: { visible: false },
+    children: [
+      {
+        path: '/profile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: { title: '个人中心', visible: false }
+      }
+    ]
   }
 ]
 

@@ -6,11 +6,16 @@ const props = defineProps({
   to: {
     type: String,
     required: true
+  },
+  route: {
+    type: Object,
+    required: false
   }
 })
 
 const isExternalLink = computed(() => isExternal(props.to))
 const type = computed(() => (isExternalLink.value ? 'a' : 'router-link'))
+
 const linkProps = (to: string) => {
   if (isExternalLink.value) {
     return {
