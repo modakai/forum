@@ -1,5 +1,6 @@
 package com.sakura.forum.framework.web.exception;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.exception.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Objects;
+
+import static com.sakura.forum.enums.ResultCodeEnum.LOGIN_FAIL;
 
 /**
  * 全局异常处理
@@ -36,6 +39,14 @@ public class GlobalExceptionHandler {
     public SaResult handlerServiceException(ServiceException e) {
         log.error("业务异常：{}", e.getMessage(), e);
         return SaResult.error(e.getMsg()).setCode(e.getCode());
+    }
+
+    @ExceptionHandler(NotLoginException.class)
+    public SaResult handlerNotLoginException(NotLoginException e) {
+        log.error("未登录异常：{}", e.getMessage(), e);
+        return SaResult.error()
+                .setCode(LOGIN_FAIL.getCode())
+                .setMsg(LOGIN_FAIL.getMessage());
     }
 
     /**

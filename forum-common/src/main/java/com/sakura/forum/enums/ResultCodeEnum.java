@@ -8,6 +8,8 @@ public enum ResultCodeEnum {
     FAIL(500, "操作失败"),
     // 用户不存在
     USER_IS_NOT_EXIST(404, "用户不存在"),
+    // 登入失败
+    LOGIN_FAIL(401, "登入失败"),
     WARN(501, "警告"),
     // 参数异常
     DATA_ERROR(403, "参数异常");
