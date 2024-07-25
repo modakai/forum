@@ -91,7 +91,13 @@ const submitLogin = async () => {
       message: '登入成功',
       title: `HI,${getGreeting()}`
     })
-    router.push('/')
+
+    const currentRoute = router.currentRoute.value
+    const redirectPath = currentRoute.query.redirect || currentRoute.meta.redirect
+    // 跳转页面，如果没有重定向路由，就跳转首页
+    const targetPath = redirectPath ? redirectPath.toString() : '/'
+    console.log('跳转路径', targetPath)
+    await router.push({ path: '/' })
   } catch (e) {
     loading.value = false
     ElNotification({
@@ -183,7 +189,7 @@ onMounted(() => {
                   :loading="loading"
                   style="width: 100%"
                   type="primary"
-                  @click="submitLogin"
+                  @click.keyup.enter="submitLogin"
                   >登录
                 </el-button>
               </el-form-item>

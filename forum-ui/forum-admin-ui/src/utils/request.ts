@@ -1,7 +1,9 @@
 // 创建axios实例
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { getToken } from '@/utils/tokenUtil'
+import { useUserStore } from '@/store'
+import router from '@/router'
 
 // 是否显示重新登入
 export const isRelogin = { show: false }
@@ -30,6 +32,28 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (res) => {
+    if (res.data.code === 401) {
+      if (!isRelogin.show) {
+        isRelogin.show = true
+        ElMessageBox.confirm('登录状态已过期，请重新登录', '系统提示', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            isRelogin.show = false
+            useUserStore().clearToken()
+            // 跳转
+            router.replace({
+              path: '/login',
+              query: { redirect: router.currentRoute.value.fullPath }
+            })
+          })
+          .catch(() => {
+            isRelogin.show = false
+          })
+      }
+    }
     return res.data
   },
   (error) => {

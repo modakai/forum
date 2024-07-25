@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { UserInfo, UserState } from '@/store/modules/types/types'
 import type { NormalLoginForm, SmsLoginForm } from '@/api/user/type'
-import { setLocalToken, setSessionToken } from '@/utils/tokenUtil'
+import { removeLocalToken, removeSessionToken, setLocalToken, setSessionToken } from '@/utils/tokenUtil'
 import { getUserInfo, login } from '@/api/user'
 
 /**
@@ -65,6 +65,11 @@ export const useUserStore = defineStore('forum-sys-user', {
         .catch((error) => {
           return Promise.reject(error)
         })
+    },
+    logout() {},
+    clearToken() {
+      removeSessionToken()
+      removeLocalToken()
     }
   }
 })

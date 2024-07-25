@@ -17,6 +17,7 @@ NProgress.configure({ showSpinner: false })
 const whiteList = ['/login', '/auth-redirect', '/bind', '/register']
 
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   if (getToken()) {
     to.meta.title && useAppStore().setTitle(to.meta.title as string)
     // 如果存在token 无法跳转登入页

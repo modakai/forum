@@ -62,7 +62,9 @@ async function handlerContextMenu(e: PointerEvent) {
       <el-tab-pane
         v-for="tab in tabsStore.tabPans"
         :key="tab.path"
-        :closable="!(tabsStore.tabPans.length === 1)"
+        :closable="
+          !(tabsStore.tabPans.length === 1) && $router.currentRoute.value.path !== tab.path
+        "
         :label="tab.label"
         :name="tab.path"
       >
