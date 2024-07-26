@@ -2,6 +2,7 @@ package com.sakura.forum.framework.web.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.util.SaResult;
+import com.sakura.forum.exception.BaseException;
 import com.sakura.forum.exception.ServiceException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -47,6 +48,16 @@ public class GlobalExceptionHandler {
         return SaResult.error()
                 .setCode(LOGIN_FAIL.getCode())
                 .setMsg(LOGIN_FAIL.getMessage());
+    }
+
+    /**
+     * 拦截未知的运行时异常
+     */
+    @ExceptionHandler(BaseException.class)
+    public SaResult handleBaseException(BaseException e, HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        log.error("请求地址'{}', 发送异常.", requestURI, e);
+        return SaResult.error(e.getMessage()).setCode(e.getCode());
     }
 
     /**

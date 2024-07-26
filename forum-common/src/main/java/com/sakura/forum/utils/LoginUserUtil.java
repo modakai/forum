@@ -22,7 +22,7 @@ public class LoginUserUtil {
 
     private static final String CACHE_PREFIX = "userinfo:";
 
-    private static final String SYS_USER_KEY = CACHE_PREFIX + "sys:user:";
+    public static final String SYS_USER_KEY = CACHE_PREFIX + "sys:user:";
 
     private static final String APP_USER_KEY = CACHE_PREFIX + "app:user:";
 

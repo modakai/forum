@@ -1,6 +1,7 @@
 package com.sakura.forum.struct;
 
 import com.sakura.forum.core.LoginUser;
+import com.sakura.forum.core.domain.dto.ChangeProfileDto;
 import com.sakura.forum.core.domain.dto.MenuSaveDto;
 import com.sakura.forum.core.domain.entity.SysMenu;
 import com.sakura.forum.core.domain.entity.SysUser;
@@ -35,4 +36,11 @@ public interface BeanCopyMapper {
      * @return 系统用户
      */
     SysUser loginUserToSysUser(LoginUser loginUser);
+
+    /**
+     * 修改资料DTO 转换成 系统用户
+     *
+     * @param dto
+     */
+    SysUser changeProfileDtoToSysUser(ChangeProfileDto dto);
 }

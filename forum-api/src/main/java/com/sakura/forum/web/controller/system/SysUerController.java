@@ -3,6 +3,7 @@ package com.sakura.forum.web.controller.system;
 import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.core.BaseController;
 import com.sakura.forum.core.domain.dto.ChangePasswordDto;
+import com.sakura.forum.core.domain.dto.ChangeProfileDto;
 import com.sakura.forum.system.service.ISysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,6 +27,14 @@ public class SysUerController extends BaseController {
     @PutMapping("change/password")
     public SaResult changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
         userService.changePassword(changePasswordDto);
+        return success();
+    }
+
+    @Operation(summary = "修改个人信息", description = "修改个人信息")
+    @PutMapping("change/profile")
+    public SaResult changeProfile(@RequestBody ChangeProfileDto form) {
+        // 修改接口
+        userService.changeProfile(form);
         return success();
     }
 

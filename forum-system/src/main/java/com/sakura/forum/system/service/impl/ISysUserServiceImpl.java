@@ -1,14 +1,18 @@
 package com.sakura.forum.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sakura.forum.core.LoginUser;
 import com.sakura.forum.core.domain.dto.ChangePasswordDto;
+import com.sakura.forum.core.domain.dto.ChangeProfileDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.exception.ServiceException;
+import com.sakura.forum.struct.BeanCopyMapper;
 import com.sakura.forum.system.mapper.SysUserMapper;
 import com.sakura.forum.system.service.ISysUserService;
 import com.sakura.forum.utils.LoginUserUtil;
 import com.sakura.forum.utils.PasswordUtil;
+import com.sakura.forum.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
+
+    private final RedisUtil redisUtil;
 
     @Override
     public SysUser searchUserInfo(long id) {
@@ -42,6 +48,29 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 .eq(SysUser::getId, userId)
                 .set(SysUser::getPassword, PasswordUtil.encryption(changePasswordDto.getNewPassword()))
                 .update();
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void changeProfile(ChangeProfileDto form) {
+        // 1 取Id
+        LoginUser loginSysUser = LoginUserUtil.getLoginSysUser();
+        Long userId = loginSysUser.getId();
+        // 2 转换对象
+        SysUser sysUser = BeanCopyMapper.INSTANCE.changeProfileDtoToSysUser(form);
+        // 3 修改数据
+        lambdaUpdate()
+                .eq(SysUser::getId, userId)
+                .update(sysUser);
+
+        // 修改缓存？
+        loginSysUser
+                .setGender(form.getGender())
+                .setNickName(form.getNickName())
+                .setPhone(form.getPhone());
+
+        // 更新缓存
+        LoginUserUtil.cacheLoginUser(loginSysUser);
     }
 
 }

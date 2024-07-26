@@ -53,6 +53,12 @@ service.interceptors.response.use(
             isRelogin.show = false
           })
       }
+    } else if (res.data.code === 404) {
+      ElMessage({
+        message: res.data.msg,
+        type: 'error',
+        duration: 5 * 1000
+      })
     }
     return res.data
   },

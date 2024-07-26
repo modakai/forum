@@ -34,6 +34,15 @@ export interface ChangePasswordForm {
   newPassword: string
 }
 
+/**
+ * 更新用户信息
+ */
+export interface ChangeProfileForm {
+  nickName: string
+  gender: boolean
+  phone: string
+}
+
 //定义登录接口返回数据类型
 export interface LoginResponseData extends ResponseData {
   data: string

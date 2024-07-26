@@ -70,6 +70,9 @@ export const useUserStore = defineStore('forum-sys-user', {
     clearToken() {
       removeSessionToken()
       removeLocalToken()
+    },
+    changeProfile(data: any) {
+      this.userInfo = Object.assign(data)
     }
   }
 })

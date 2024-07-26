@@ -2,6 +2,7 @@ package com.sakura.forum.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sakura.forum.core.domain.dto.ChangePasswordDto;
+import com.sakura.forum.core.domain.dto.ChangeProfileDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 
 public interface ISysUserService extends IService<SysUser> {
@@ -20,4 +21,11 @@ public interface ISysUserService extends IService<SysUser> {
      * @param changePasswordDto 修改密码的实体
      */
     void changePassword(ChangePasswordDto changePasswordDto);
+
+    /**
+     * 修改用户信息
+     *
+     * @param form 修改信息的数据
+     */
+    void changeProfile(ChangeProfileDto form);
 }

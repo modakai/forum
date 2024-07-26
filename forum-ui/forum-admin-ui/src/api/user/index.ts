@@ -1,6 +1,7 @@
 // 登入接口
 import type {
   ChangePasswordForm,
+  ChangeProfileForm,
   LoginResponseData,
   NormalLoginForm,
   SmsLoginForm,
@@ -17,7 +18,7 @@ enum API {
 
   CHANGE_PASSWORD_URL = '/system/user/change/password',
 
-  LOGOUT_URL = '/admin/acl/index/logout'
+  CHANGE_PROFILE_URL = '/system/user/change/profile'
 }
 
 /**
@@ -42,4 +43,12 @@ export const getUserInfo = () => {
  */
 export const changePassword = (form: ChangePasswordForm) => {
   return request.put<any, ResponseData>(API.CHANGE_PASSWORD_URL, form)
+}
+
+/**
+ * 更新用户信息
+ * @param form 对象
+ */
+export const changeProfile = (form: ChangeProfileForm) => {
+  return request.put<any, ResponseData>(API.CHANGE_PROFILE_URL, form)
 }

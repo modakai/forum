@@ -1,6 +1,5 @@
 package com.sakura.forum.core.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.sakura.forum.core.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -57,9 +56,6 @@ public class SysUser extends BaseEntity {
      * 状态 ( 0(false) 正常  1 (true)禁用 )
      */
     private Boolean status;
-
-    @TableField(exist = false)
-    private String roleName;
 
     public boolean isAdmin() {
         return isAdmin(this.id);

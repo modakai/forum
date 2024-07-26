@@ -9,7 +9,6 @@ import UploadAvatar from '@/views/profile/UploadAvatar.vue'
 import UpdateInfo from '@/views/profile/UpdateInfo.vue'
 
 const userStore = useUserStore()
-const userInfo = userStore.userInfo
 
 let pwDialogVisible = ref(false)
 // 修改密码-取消密码修改
@@ -19,7 +18,6 @@ const cancelUpdatePW = () => {
 // 修改密码-确认修改密码
 const confirmUpdatePW = () => {
   pwDialogVisible.value = false
-  ElMessage.warning('功能待开发')
 }
 
 let uploadAvatarVisible = ref(false)
@@ -40,9 +38,10 @@ const cancelUpdateInfo = () => {
   updateInfoVisible.value = false
 }
 // 修改资料-确认修改资料
-const confirmUpdateInfo = () => {
+const confirmUpdateInfo = (data: any) => {
   updateInfoVisible.value = false
-  ElMessage.warning('功能待开发')
+  // 刷新数据
+  userStore.changeProfile(data)
 }
 </script>
 
@@ -52,11 +51,11 @@ const confirmUpdateInfo = () => {
     <el-card>
       <el-space alignment="center">
         <!--  avatar    -->
-        <el-avatar :size="100" :src="userInfo.avatar" />
+        <el-avatar :size="100" :src="userStore.userInfo.avatar" />
         <div class="ml-20">
           <div class="flex info">
             <span>用户名:</span>
-            <span class="username ml-12">{{ userInfo.username }}</span>
+            <span class="username ml-12">{{ userStore.userInfo.username }}</span>
             <el-button
               :icon="Edit"
               class="ml-32"
@@ -78,19 +77,19 @@ const confirmUpdateInfo = () => {
         <div class="card-header">
           <span>个人资料信息</span>
           <el-button :icon="Edit" text type="primary" @click="() => (updateInfoVisible = true)"
-            >修改资料</el-button
-          >
+            >修改资料
+          </el-button>
         </div>
       </template>
       <el-descriptions :column="1" :size="'large'" border>
         <el-descriptions-item label="昵称" label-align="center">
-          {{ userInfo.nickName }}
+          {{ userStore.userInfo.nickName }}
         </el-descriptions-item>
         <el-descriptions-item label="性别" label-align="center"
-          >{{ userInfo.gender ? '女' : '男' }}
+          >{{ userStore.userInfo.gender ? '女' : '男' }}
         </el-descriptions-item>
         <el-descriptions-item label="电话" label-align="center"
-          >{{ userInfo.phone }}
+          >{{ userStore.userInfo.phone }}
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
@@ -102,7 +101,12 @@ const confirmUpdateInfo = () => {
     @cancel="cancelUploadAvatar"
     @ok="confirmUploadAvatar"
   />
-  <update-info :is-show="updateInfoVisible" @cancel="cancelUpdateInfo" @ok="confirmUpdateInfo" />
+  <update-info
+    :is-show="updateInfoVisible"
+    :user-info="userStore.userInfo"
+    @cancel="cancelUpdateInfo"
+    @ok="confirmUpdateInfo"
+  />
 </template>
 
 <style lang="scss" scoped>
