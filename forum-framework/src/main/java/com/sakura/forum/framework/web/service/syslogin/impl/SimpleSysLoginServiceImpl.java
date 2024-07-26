@@ -7,12 +7,12 @@ import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.exception.ServiceException;
 import com.sakura.forum.framework.factory.captcha.CaptchaFactory;
 import com.sakura.forum.framework.web.service.captcha.CaptchaService;
-import com.sakura.forum.framework.web.service.syslogin.PasswordService;
 import com.sakura.forum.framework.web.service.syslogin.SysLoginService;
 import com.sakura.forum.security.StpKit;
 import com.sakura.forum.struct.BeanCopyMapper;
 import com.sakura.forum.system.mapper.SysUserMapper;
 import com.sakura.forum.utils.LoginUserUtil;
+import com.sakura.forum.utils.PasswordUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
@@ -24,12 +24,10 @@ import java.util.concurrent.CompletableFuture;
 public class SimpleSysLoginServiceImpl implements SysLoginService {
 
     private final SysUserMapper sysUserMapper;
-    private final PasswordService passwordService;
     private final CaptchaFactory captchaFactory;
 
-    public SimpleSysLoginServiceImpl(SysUserMapper sysUserMapper, PasswordService passwordService, CaptchaFactory captchaFactory) {
+    public SimpleSysLoginServiceImpl(SysUserMapper sysUserMapper, CaptchaFactory captchaFactory) {
         this.sysUserMapper = sysUserMapper;
-        this.passwordService = passwordService;
         this.captchaFactory = captchaFactory;
     }
 
@@ -49,7 +47,7 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
         }
 
         // 判断密码
-        passwordService.validate(formData.getPassword(), sysUser.getPassword());
+        PasswordUtil.validate(formData.getPassword(), sysUser.getPassword());
 
         // 判断状态
         if (sysUser.getStatus()) {
@@ -74,7 +72,7 @@ public class SimpleSysLoginServiceImpl implements SysLoginService {
         CompletableFuture.runAsync(() -> {
             captchaService.removeCaptcha(formData.getUsername());
         });
-        
+
         // 返回token
         return token;
     }

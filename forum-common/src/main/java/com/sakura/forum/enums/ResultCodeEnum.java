@@ -12,7 +12,9 @@ public enum ResultCodeEnum {
     LOGIN_FAIL(401, "登入失败"),
     WARN(501, "警告"),
     // 参数异常
-    DATA_ERROR(403, "参数异常");
+    DATA_ERROR(403, "参数异常"),
+    // 旧密码错误
+    OLD_PASSWORD_ERROR(101, "旧密码错误");
 
     /**
      * 自定义状态码

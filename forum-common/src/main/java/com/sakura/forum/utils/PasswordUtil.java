@@ -1,18 +1,10 @@
-package com.sakura.forum.framework.web.service.syslogin;
+package com.sakura.forum.utils;
 
 import com.sakura.forum.exception.user.UserPasswordNotMatchException;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
-import org.springframework.stereotype.Service;
 
-/**
- * 密码服务
- *
- * @author modakai
- */
-@Service
-public class PasswordService {
-
+public class PasswordUtil {
 
     private static final int ITERATIONS = 10; // 迭代次数
     private static final int MEMORY = 65536; // 内存占用(KB)
@@ -21,14 +13,13 @@ public class PasswordService {
     // 默认盐 就是16
     private static final Argon2 argon2 = Argon2Factory.create();
 
-
     /**
      * 使用 BCrypt 进行加密
      *
      * @param plainTextPassword 加密的密码
      * @return 加密后的密文
      */
-    public String encryption(String plainTextPassword) {
+    public static String encryption(String plainTextPassword) {
         return argon2.hash(ITERATIONS, MEMORY, PARALLELISM, plainTextPassword.toCharArray());
     }
 
@@ -39,7 +30,7 @@ public class PasswordService {
      * @param plainTextPassword 明文
      * @param storedHash        密文
      */
-    public void validate(String plainTextPassword, String storedHash) {
+    public static void validate(String plainTextPassword, String storedHash) {
         if (!argon2.verify(storedHash, plainTextPassword.toCharArray())) {
             // 不匹配就抛出密码错误异常
             throw new UserPasswordNotMatchException();

@@ -26,6 +26,14 @@ export interface SmsLoginForm {
   rememberMe: boolean
 }
 
+/**
+ * 更新密码
+ */
+export interface ChangePasswordForm {
+  oldPassword: string
+  newPassword: string
+}
+
 //定义登录接口返回数据类型
 export interface LoginResponseData extends ResponseData {
   data: string
