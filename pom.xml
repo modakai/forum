@@ -32,6 +32,7 @@
         <commons-pool2.version>2.12.0</commons-pool2.version>
         <argon2.version>2.11</argon2.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <minio.version>8.5.2</minio.version>
 
         <!-- maven打包的控制 -->
         <maven.compiler.source>17</maven.compiler.source>
@@ -122,6 +123,13 @@
                 <artifactId>argon2-jvm</artifactId>
                 <version>${argon2.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
 
             <!-- lombok 依赖 -->
             <dependency>

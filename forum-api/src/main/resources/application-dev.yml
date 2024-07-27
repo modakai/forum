@@ -35,3 +35,16 @@ spring:
       test-while-idle: true
       test-on-borrow: false
       test-on-return: false
+
+  # 上传配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+
+minio:
+  url: http://localhost:9000
+  base-bucket: forum
+  accessKey: forumadmin
+  secretKey: forumadmin

@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.log
+/docker/
 
 ### IntelliJ IDEA ###
 .idea/
