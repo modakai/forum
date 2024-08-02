@@ -73,6 +73,9 @@ export const useUserStore = defineStore('forum-sys-user', {
     },
     changeProfile(data: any) {
       this.userInfo = Object.assign(data)
+    },
+    changeAvatar(url: string) {
+      this.userInfo.avatar = url
     }
   }
 })

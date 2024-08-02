@@ -4,8 +4,7 @@ import { Edit } from '@element-plus/icons-vue'
 import '@/styles/components/profile.scss'
 import { ref } from 'vue'
 import UpdatePW from '@/views/profile/UpdatePW.vue'
-import { ElMessage } from 'element-plus'
-import UploadAvatar from '@/views/profile/UploadAvatar.vue'
+import ChangeAvatar from '@/views/profile/ChangeAvatar.vue'
 import UpdateInfo from '@/views/profile/UpdateInfo.vue'
 
 const userStore = useUserStore()
@@ -26,10 +25,10 @@ const cancelUploadAvatar = () => {
   uploadAvatarVisible.value = false
 }
 // 上传头像-确认上传头像
-const confirmUploadAvatar = () => {
+const confirmUploadAvatar = (url: string) => {
   uploadAvatarVisible.value = false
-  ElMessage.warning('功能待开发')
-  // 发送更新头像请求
+  // 更新pinia中的用户头像
+  userStore.changeAvatar(url)
 }
 
 let updateInfoVisible = ref(false)
@@ -96,7 +95,7 @@ const confirmUpdateInfo = (data: any) => {
   </div>
   <!-- 修改密码组件 -->
   <update-p-w :is-show="pwDialogVisible" @cancel="cancelUpdatePW" @ok="confirmUpdatePW" />
-  <upload-avatar
+  <change-avatar
     :is-show="uploadAvatarVisible"
     @cancel="cancelUploadAvatar"
     @ok="confirmUploadAvatar"

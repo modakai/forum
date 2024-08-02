@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @Tag(name = "系统用户接口")
 @RestController
 @RequestMapping("/system/user")
@@ -35,6 +37,17 @@ public class SysUerController extends BaseController {
     public SaResult changeProfile(@RequestBody ChangeProfileDto form) {
         // 修改接口
         userService.changeProfile(form);
+        return success();
+    }
+
+    @Operation(summary = "修改头像", description = "修改头像")
+    @PutMapping("change/avatar")
+    public SaResult changeAvatar(@RequestBody Map<String, Object> data) {
+        String avatarUrl = (String) data.get("avatarUrl");
+        // 修改数据库
+        userService.changeAvatar(avatarUrl);
+        // 修改缓存
+        // 返回响应结果
         return success();
     }
 

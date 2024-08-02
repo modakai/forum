@@ -1,55 +1,103 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import UploadImage from '@/components/common/UploadImage.vue'
+import { ref } from 'vue'
+import type { UploadProps } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
+import { getToken } from '@/utils/tokenUtil'
 
 const props = defineProps({
-  isShow: {
-    type: Boolean,
-    default: false
+  limit: {
+    type: Number,
+    default: 1
+  },
+  action: {
+    type: String,
+    default: import.meta.env.VITE_APP_BASE_API + '/upload/img'
   }
 })
 
-const emit = defineEmits(['cancel', 'ok'])
+const imageUrl = ref()
 
-let loading = ref(false)
+const hasAvatar = ref(false)
+// 提供对外获取头像地址的方法
+defineExpose({
+  getAvatarUrl: (): string => imageUrl.value,
+  hasAvatar: hasAvatar,
+  onAvatarChange
+})
 
-let visible = ref(false)
-const cancel = () => {
-  // visible.value = !visible.value
-  // 触发自定义事件
-  emit('cancel')
-}
-const confirm = () => {
-  loading.value = true
-  // 发送请求
-  // 请求成功后待用父组件方法
-  setTimeout(() => {
-    loading.value = false
-    emit('ok')
-  }, 1000)
+// 当头像发生变化时，更新 hasAvatar 的值
+function onAvatarChange(hasAvatarValue: boolean) {
+  hasAvatar.value = hasAvatarValue
 }
 
-watch(
-  () => props.isShow,
-  (val) => {
-    visible.value = val
-  },
-  {
-    immediate: true
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+  if (response.code !== 200) {
+    ElMessage.error(response.msg)
+  } else {
+    imageUrl.value = response.data
+    onAvatarChange(true)
   }
-)
+}
+
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  console.log(rawFile.type)
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    ElMessage.error('上传图片类型错误！仅支持jpg、jpeg、png格式')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 10) {
+    ElMessage.error('上传图片大小不能超过10M')
+    return false
+  }
+  return true
+}
 </script>
 
 <template>
-  <el-dialog v-model="visible" :before-close="cancel" draggable title="上传头像" width="350">
-    <upload-image :limit="1" style="display: flex; justify-content: center" />
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="cancel()">取消</el-button>
-        <el-button :loading="loading" type="primary" @click="confirm()"> 确认</el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <el-upload
+    :action="action + '?type=avatar'"
+    :before-upload="beforeAvatarUpload"
+    :headers="{ 'Authorization-ADMIN': 'Bearer' + getToken() }"
+    :limit="limit"
+    :name="'file'"
+    :on-success="handleAvatarSuccess"
+    :show-file-list="false"
+    class="avatar-uploader"
+  >
+    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+    <el-icon v-else class="avatar-uploader-icon">
+      <Plus />
+    </el-icon>
+  </el-upload>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
+
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
+</style>

@@ -28,4 +28,11 @@ public interface ISysUserService extends IService<SysUser> {
      * @param form 修改信息的数据
      */
     void changeProfile(ChangeProfileDto form);
+
+    /**
+     * 修改用户头像
+     *
+     * @param avatarUrl 用户头像的url
+     */
+    void changeAvatar(String avatarUrl);
 }

@@ -93,7 +93,7 @@ public class MinioUtil {
         String originalFilename = multipartFile.getOriginalFilename();
         // 校验上传文件的类型 图片类型只允许为 jpg png
         if (originalFilename != null) {
-            String fileType = originalFilename.substring(originalFilename.indexOf("."));
+            String fileType = originalFilename.substring(originalFilename.indexOf(".") + 1);
             if (!FileImageEnum.isImage(fileType)) {
                 throw new FileTypeErrorException(ResultCodeEnum.IMAGE_TYPE_ERROR);
             }

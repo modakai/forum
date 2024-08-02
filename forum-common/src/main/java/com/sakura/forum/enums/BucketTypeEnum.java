@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum BucketTypeEnum {
     // 评论 bucket
-    BUCKET_COMMENT("comment");
+    BUCKET_COMMENT("comment"),
+    BUCKET_AVATAR("avatar");
 
     private final String type;
 

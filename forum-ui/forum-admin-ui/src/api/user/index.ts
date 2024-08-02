@@ -18,7 +18,9 @@ enum API {
 
   CHANGE_PASSWORD_URL = '/system/user/change/password',
 
-  CHANGE_PROFILE_URL = '/system/user/change/profile'
+  CHANGE_PROFILE_URL = '/system/user/change/profile',
+
+  CHANGE_AVATAR_URL = '/system/user/change/avatar'
 }
 
 /**
@@ -51,4 +53,12 @@ export const changePassword = (form: ChangePasswordForm) => {
  */
 export const changeProfile = (form: ChangeProfileForm) => {
   return request.put<any, ResponseData>(API.CHANGE_PROFILE_URL, form)
+}
+
+/**
+ * 修改用户头像
+ * @param url 用户头像地址
+ */
+export const changeAvatar = (url: string) => {
+  return request.put<any, ResponseData>(API.CHANGE_AVATAR_URL, { avatarUrl: url })
 }

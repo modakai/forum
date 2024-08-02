@@ -73,4 +73,19 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         LoginUserUtil.cacheLoginUser(loginSysUser);
     }
 
+    @Override
+    public void changeAvatar(String avatarUrl) {
+        // 取用户id
+        LoginUser loginSysUser = LoginUserUtil.getLoginSysUser();
+        // 修改数据
+        lambdaUpdate()
+                .eq(SysUser::getId, loginSysUser.getId())
+                .set(SysUser::getAvatar, avatarUrl)
+                .update();
+
+        // 修改缓存数据
+        loginSysUser.setAvatar(avatarUrl);
+        LoginUserUtil.cacheLoginUser(loginSysUser);
+    }
+
 }

@@ -15,6 +15,8 @@ public enum ResultCodeEnum {
     DATA_ERROR(403, "参数异常"),
     // 旧密码错误
     OLD_PASSWORD_ERROR(101, "旧密码错误"),
+    // 密码错误
+    PASSWORD_ERROR(102, "密码错误"),
     // 文件类型错误
     IMAGE_TYPE_ERROR(201, "图片文件类型错误；仅支持jpg、png、jpeg格式图片");
 
