@@ -1,7 +1,10 @@
 package com.sakura.forum.utils;
 
 import com.sakura.forum.config.MinioConfig;
+import com.sakura.forum.enums.FileImageEnum;
+import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.exception.ServiceException;
+import com.sakura.forum.exception.file.FileTypeErrorException;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -54,6 +57,11 @@ public class MinioUtil {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             // 获取用户上传文件的名称
             String originalFilename = multipartFile.getOriginalFilename();
+            // 校验上传文件的类型 图片类型只允许为 jpg png
+            if (originalFilename != null && !originalFilename.endsWith(".jpg") && !originalFilename.endsWith(".png")) {
+                throw new ServiceException(500, "上传文件类型错误");
+            }
+
             String bucket = getBucketName(bucketName);
             log.info("文件名：{} bucket：{}", originalFilename, bucket);
             PutObjectArgs putObjectArgs = PutObjectArgs.builder()
@@ -71,6 +79,27 @@ public class MinioUtil {
             log.error("上传发生异常：{}", e.getMessage(), e);
             throw new ServiceException(500, "上传失败");
         }
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param bucketName    桶的名称
+     * @param multipartFile 文件数据
+     * @return 访问路径
+     */
+    public String uploadImage(String bucketName, MultipartFile multipartFile) {
+        // 获取用户上传文件的名称
+        String originalFilename = multipartFile.getOriginalFilename();
+        // 校验上传文件的类型 图片类型只允许为 jpg png
+        if (originalFilename != null) {
+            String fileType = originalFilename.substring(originalFilename.indexOf("."));
+            if (!FileImageEnum.isImage(fileType)) {
+                throw new FileTypeErrorException(ResultCodeEnum.IMAGE_TYPE_ERROR);
+            }
+        }
+
+        return uploadObject(bucketName, multipartFile);
     }
 
     /**

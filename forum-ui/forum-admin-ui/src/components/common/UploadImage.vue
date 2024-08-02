@@ -8,21 +8,31 @@ const props = defineProps({
   limit: {
     type: Number,
     default: 1
+  },
+  action: {
+    type: String,
+    default: '/upload/img'
   }
 })
 
 const imageUrl = ref('')
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
-  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+  console.log('图片上传')
+  console.log(response)
+  if (response.code !== 200) {
+    ElMessage.error(response.msg)
+  } else {
+    imageUrl.value = response.data
+  }
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('Avatar picture must be JPG format!')
+  if (rawFile.type !== 'image/jpeg' || rawFile.type !== 'image/jpeg') {
+    ElMessage.error('上传图片类型错误！仅支持jpg、jpeg、png格式')
     return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
+  } else if (rawFile.size / 1024 / 1024 > 10) {
+    ElMessage.error('上传图片大小不能超过10M')
     return false
   }
   return true
@@ -31,11 +41,11 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 <template>
   <el-upload
+    :action="action"
     :before-upload="beforeAvatarUpload"
     :limit="limit"
     :on-success="handleAvatarSuccess"
     :show-file-list="false"
-    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
     class="avatar-uploader"
   >
     <img v-if="imageUrl" :src="imageUrl" class="avatar" />

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import Upload from '@/components/common/Upload.vue'
+import UploadImage from '@/components/common/UploadImage.vue'
 
 const props = defineProps({
   isShow: {
@@ -42,7 +42,7 @@ watch(
 
 <template>
   <el-dialog v-model="visible" :before-close="cancel" draggable title="上传头像" width="350">
-    <upload :limit="1" style="display: flex; justify-content: center" />
+    <upload-image :limit="1" style="display: flex; justify-content: center" />
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="cancel()">取消</el-button>
