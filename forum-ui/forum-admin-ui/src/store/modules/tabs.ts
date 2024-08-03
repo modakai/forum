@@ -23,7 +23,7 @@ export const useTabsStore = defineStore('tabs', {
      *
      * @param route 路由对象
      */
-    addTab(route: RouteRecord) {
+    addTab(route: RouteRecord | any) {
       // 判断是否以及添加过 如果没有添加过则直接添加
       if (this.tabPans.some((item) => item.path === route.path)) {
         return

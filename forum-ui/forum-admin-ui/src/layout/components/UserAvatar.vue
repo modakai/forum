@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/store'
+import { useTabsStore, useUserStore } from '@/store'
 import router from '@/router'
 
+const tabsStore = useTabsStore()
 const errorHandler = () => true
 const DEFAULT_AVATAR = '@/src/assets/images/img.png'
 const dropdownList = [
@@ -12,7 +13,14 @@ const dropdownList = [
     click() {
       // 跳转个人中心页
       router.push(this.path)
-      // 发生获取profile请求
+      // 添加到tabPens
+      let routeRecord = {
+        path: this.path,
+        meta: {
+          title: this.label
+        }
+      }
+      tabsStore.addTab(routeRecord)
     }
   },
   {
