@@ -72,7 +72,14 @@ export const useUserStore = defineStore('forum-sys-user', {
       removeLocalToken()
     },
     changeProfile(data: any) {
-      this.userInfo = Object.assign(data)
+      // 遍历 data 的所有属性
+      for (const key in data) {
+        // 检查 userInfo 是否有相同的属性
+        if (Object.prototype.hasOwnProperty.call(this.userInfo, key)) {
+          // 更新 userInfo 的相应属性
+          this.userInfo[key] = data[key]
+        }
+      }
     },
     changeAvatar(url: string) {
       this.userInfo.avatar = url

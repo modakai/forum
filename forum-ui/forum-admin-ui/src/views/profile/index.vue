@@ -32,6 +32,12 @@ const confirmUploadAvatar = (url: string) => {
 }
 
 let updateInfoVisible = ref(false)
+const updateInfoRef = ref<InstanceType<typeof UpdateInfo>>()
+const openUpdateInfo = () => {
+  updateInfoVisible.value = true
+  // 传递数据
+  updateInfoRef.value?.setForm(userStore.userInfo)
+}
 // 修改资料-取消修改资料
 const cancelUpdateInfo = () => {
   updateInfoVisible.value = false
@@ -75,9 +81,7 @@ const confirmUpdateInfo = (data: any) => {
       <template #header>
         <div class="card-header">
           <span>个人资料信息</span>
-          <el-button :icon="Edit" text type="primary" @click="() => (updateInfoVisible = true)"
-            >修改资料
-          </el-button>
+          <el-button :icon="Edit" text type="primary" @click="openUpdateInfo">修改资料 </el-button>
         </div>
       </template>
       <el-descriptions :column="1" :size="'large'" border>
@@ -101,6 +105,7 @@ const confirmUpdateInfo = (data: any) => {
     @ok="confirmUploadAvatar"
   />
   <update-info
+    ref="updateInfoRef"
     :is-show="updateInfoVisible"
     :user-info="userStore.userInfo"
     @cancel="cancelUpdateInfo"

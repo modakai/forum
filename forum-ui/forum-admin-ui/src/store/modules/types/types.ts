@@ -3,7 +3,7 @@ export interface UserInfo {
   username: string
   nickName: string
   avatar: string
-  gender: string
+  gender: boolean
 
   [propName: string]: any
 }

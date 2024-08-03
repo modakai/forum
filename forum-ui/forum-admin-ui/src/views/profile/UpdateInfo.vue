@@ -77,16 +77,6 @@ watch(
     immediate: true
   }
 )
-watch(
-  () => props.userInfo,
-  (val) => {
-    // 把props的对象赋值给form
-    Object.assign(form, val)
-  },
-  {
-    immediate: true
-  }
-)
 
 /**
  * 提交表单
@@ -113,6 +103,20 @@ const submitForm = () => {
     }
   })
 }
+
+/**
+ * 设置form数据
+ * @param data 数据
+ */
+const setForm = (data: UserInfo) => {
+  form.phone = data.phone
+  form.nickName = data.nickName
+  form.gender = data.gender
+}
+
+defineExpose({
+  setForm
+})
 </script>
 
 <template>
