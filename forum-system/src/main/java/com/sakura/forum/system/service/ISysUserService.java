@@ -1,11 +1,19 @@
 package com.sakura.forum.system.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sakura.forum.core.domain.dto.ChangePasswordDto;
 import com.sakura.forum.core.domain.dto.ChangeProfileDto;
+import com.sakura.forum.core.domain.dto.PageDto;
+import com.sakura.forum.core.domain.dto.SysUserPageDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 
 public interface ISysUserService extends IService<SysUser> {
+
+    /**
+     * 分页获取用户信息
+     */
+    Page<SysUser> searchUserPage(SysUserPageDto param, PageDto pageDto);
 
     /**
      * 获取用户信息

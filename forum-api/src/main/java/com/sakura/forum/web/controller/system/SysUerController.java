@@ -4,14 +4,19 @@ import cn.dev33.satoken.util.SaResult;
 import com.sakura.forum.core.BaseController;
 import com.sakura.forum.core.domain.dto.ChangePasswordDto;
 import com.sakura.forum.core.domain.dto.ChangeProfileDto;
+import com.sakura.forum.core.domain.dto.PageDto;
+import com.sakura.forum.core.domain.dto.SysUserPageDto;
+import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.system.service.ISysUserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Tag(name = "系统用户接口")
@@ -24,6 +29,43 @@ public class SysUerController extends BaseController {
     public SysUerController(ISysUserService userService) {
         this.userService = userService;
     }
+
+    @Operation(summary = "查询用户列表")
+    @GetMapping({"list"})
+    public SaResult searchUserTable(@ParameterObject SysUserPageDto param, @ParameterObject PageDto pageDto) {
+        return success(userService.searchUserPage(param, pageDto));
+    }
+
+    @Operation(summary = "查询用户详情", responses = {
+            @ApiResponse(responseCode = "200", description = "查询成功", content = @Content(mediaType = "application/json", schema = @Schema(implementation = SysUser.class)))
+    })
+    @GetMapping("{id}")
+    public SaResult searchUser(@PathVariable Long id) {
+        SysUser sysUser = userService.getById(id);
+        return success(sysUser);
+    }
+
+    @Operation(summary = "更新用户信息")
+    @PutMapping
+    public SaResult changeUser(SysUser user) {
+        userService.updateById(user);
+        return success();
+    }
+
+    @Operation(summary = "删除用户")
+    @DeleteMapping("{id}")
+    public SaResult delete(@PathVariable Long id) {
+        userService.removeById(id);
+        return success();
+    }
+
+    @Operation(summary = "批量删除用户")
+    @DeleteMapping("{ids}")
+    public SaResult deleteBatch(@PathVariable List<Long> ids) {
+        userService.removeByIds(ids);
+        return success();
+    }
+
 
     @Operation(summary = "修改密码", description = "修改密码")
     @PutMapping("change/password")
@@ -46,7 +88,6 @@ public class SysUerController extends BaseController {
         String avatarUrl = (String) data.get("avatarUrl");
         // 修改数据库
         userService.changeAvatar(avatarUrl);
-        // 修改缓存
         // 返回响应结果
         return success();
     }

@@ -1,9 +1,12 @@
 package com.sakura.forum.system.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.sakura.forum.core.LoginUser;
 import com.sakura.forum.core.domain.dto.ChangePasswordDto;
 import com.sakura.forum.core.domain.dto.ChangeProfileDto;
+import com.sakura.forum.core.domain.dto.PageDto;
+import com.sakura.forum.core.domain.dto.SysUserPageDto;
 import com.sakura.forum.core.domain.entity.SysUser;
 import com.sakura.forum.enums.ResultCodeEnum;
 import com.sakura.forum.exception.ServiceException;
@@ -14,6 +17,7 @@ import com.sakura.forum.utils.LoginUserUtil;
 import com.sakura.forum.utils.PasswordUtil;
 import com.sakura.forum.utils.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +25,23 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
 
-
     private final RedisUtil redisUtil;
+    private final SysUserMapper sysUserMapper;
+
+    @Override
+    public Page<SysUser> searchUserPage(SysUserPageDto param, PageDto pageDto) {
+        // 1 封装查询对象
+        Page<SysUser> page = Page.of(pageDto.getPage(), pageDto.getSize());
+
+        // 2 封装条件
+        String nickname = param.getNickname();
+        Boolean status = param.getStatus();
+        return lambdaQuery()
+                .like(StringUtils.isNotBlank(nickname), SysUser::getNickName, nickname)
+                .eq(status != null, SysUser::getStatus, status)
+                .orderByDesc(SysUser::getCreateTime)
+                .page(page);
+    }
 
     @Override
     public SysUser searchUserInfo(long id) {
